@@ -1,0 +1,84 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'ngCordova' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.35
+4 verbose node symlink C:\Program Files\nodejs\\node.exe
+5 verbose cache add [ 'ngCordova', null ]
+6 verbose cache add name=undefined spec="ngCordova" args=["ngCordova",null]
+7 verbose parsed url { protocol: null,
+7 verbose parsed url   slashes: null,
+7 verbose parsed url   auth: null,
+7 verbose parsed url   host: null,
+7 verbose parsed url   port: null,
+7 verbose parsed url   hostname: null,
+7 verbose parsed url   hash: null,
+7 verbose parsed url   search: null,
+7 verbose parsed url   query: null,
+7 verbose parsed url   pathname: 'ngCordova',
+7 verbose parsed url   path: 'ngCordova',
+7 verbose parsed url   href: 'ngCordova' }
+8 silly lockFile c4cc40e6-ngCordova ngCordova
+9 verbose lock ngCordova C:\Users\asus33\AppData\Roaming\npm-cache\c4cc40e6-ngCordova.lock
+10 silly lockFile c4cc40e6-ngCordova ngCordova
+11 silly lockFile c4cc40e6-ngCordova ngCordova
+12 verbose addNamed [ 'ngCordova', '' ]
+13 verbose addNamed [ null, '*' ]
+14 silly lockFile e8f61dac-ngCordova ngCordova@
+15 verbose lock ngCordova@ C:\Users\asus33\AppData\Roaming\npm-cache\e8f61dac-ngCordova.lock
+16 silly addNameRange { name: 'ngCordova', range: '*', hasData: false }
+17 verbose request where is /ngCordova
+18 verbose request registry https://registry.npmjs.org/
+19 verbose request id aa0708c6faa788ae
+20 verbose url raw /ngCordova
+21 verbose url resolving [ 'https://registry.npmjs.org/', './ngCordova' ]
+22 verbose url resolved https://registry.npmjs.org/ngCordova
+23 verbose request where is https://registry.npmjs.org/ngCordova
+24 info trying registry request attempt 1 at 16:08:00
+25 http GET https://registry.npmjs.org/ngCordova
+26 http 404 https://registry.npmjs.org/ngCordova
+27 verbose headers { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+27 verbose headers   'content-type': 'application/json',
+27 verbose headers   'cache-control': 'max-age=0',
+27 verbose headers   'content-length': '51',
+27 verbose headers   'accept-ranges': 'bytes',
+27 verbose headers   date: 'Mon, 20 Jul 2015 10:38:02 GMT',
+27 verbose headers   via: '1.1 varnish',
+27 verbose headers   age: '0',
+27 verbose headers   connection: 'keep-alive',
+27 verbose headers   'x-served-by': 'cache-lhr6332-LHR',
+27 verbose headers   'x-cache': 'MISS',
+27 verbose headers   'x-cache-hits': '0',
+27 verbose headers   'x-timer': 'S1437388682.899062,VS0,VE91' }
+28 silly registry.get cb [ 404,
+28 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+28 silly registry.get     'content-type': 'application/json',
+28 silly registry.get     'cache-control': 'max-age=0',
+28 silly registry.get     'content-length': '51',
+28 silly registry.get     'accept-ranges': 'bytes',
+28 silly registry.get     date: 'Mon, 20 Jul 2015 10:38:02 GMT',
+28 silly registry.get     via: '1.1 varnish',
+28 silly registry.get     age: '0',
+28 silly registry.get     connection: 'keep-alive',
+28 silly registry.get     'x-served-by': 'cache-lhr6332-LHR',
+28 silly registry.get     'x-cache': 'MISS',
+28 silly registry.get     'x-cache-hits': '0',
+28 silly registry.get     'x-timer': 'S1437388682.899062,VS0,VE91' } ]
+29 silly lockFile e8f61dac-ngCordova ngCordova@
+30 silly lockFile e8f61dac-ngCordova ngCordova@
+31 error 404 404 Not Found: ngCordova
+31 error 404
+31 error 404 'ngCordova' is not in the npm registry.
+31 error 404 You should bug the author to publish it
+31 error 404
+31 error 404 Note that you can also install from a
+31 error 404 tarball, folder, or http url, or git url.
+32 error System Windows_NT 6.1.7601
+33 error command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "ngCordova"
+34 error cwd E:\GitHub\rootv2
+35 error node -v v0.10.35
+36 error npm -v 1.4.28
+37 error code E404
+38 verbose exit [ 1, true ]

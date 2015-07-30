@@ -1,0 +1,82 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* body background color */
+.backcolor{background-color:#F8F8F8}
+
+/* ancher config */
+a{text-decoration: none; display:block; width:100%; color:#000;}
+
+/* header background color */
+.header-bar{background-color:#1D4461; color:#FFF;}
+
+/* footer background color */
+.footer-bar{background-color:#1D4461; color:#FFF;}
+
+/* Dashboard icon size and css stytemcontrol */
+.custom-icon{font-size:30px; cursor:pointer;}
+
+/* up down icon for temperature */
+.custom-icon1{font-size:40px; background-color:#336; color:red;}
+.custom-icon2{font-size:40px;}
+
+/* selected systemcontrol design */
+.custom-icon4{ color:#11C1F3; font-weight:bold;}
+.custom-icon4:hover {color:#11C1F3; font-weight:bold;}
+
+/* logo login */
+.root-loginlogo{ background-image:url(../images/root2.png); background-repeat:no-repeat; background-position:center; background-position:top;}
+
+/* security design on selected */
+.custom-security_icon4{ color:#11C1F3;}
+.custom-security-icon4:hover {color:#11C1F3;}
+
+/* fan control image desing */
+.highimg{background-image:url(../images/fast_fan.svg); background-repeat:no-repeat;}
+.medimg{background-image:url(../images/medium_fan.svg); background-repeat:no-repeat; background-position:center; background-position:top;}
+.lowimg{ background-image:url(../images/slow_fan.svg);  background-repeat:no-repeat;}
+.offimg{background-image:url(../images/off_fan.svg); background-repeat:no-repeat;}
+
+/* fan control font color */
+.highimg_s{color:#000;}
+.medimg_s{color:#000;}
+.lowimg_s{color:#000;}
+.offimg_s{color:#000;}
+
+/* fan control image desing on selected */
+.highimg_blue{background-image:url(../images/fast_fan_blue.svg); background-repeat:no-repeat; background-position:center; background-position:top; }
+.medimg_blue{background-image:url(../images/medium_fan_blue.svg); background-repeat:no-repeat; background-position:center; background-position:top;}
+.lowimg_blue{ background-image:url(../images/slow_fan_blue.svg); background-repeat:no-repeat; background-position:center; background-position:top;}
+.offimg_blue{background-image:url(../images/off_fan_blue.svg); background-repeat:no-repeat; background-position:center; background-position:top;}
+
+/* fan control font color selected */
+.highimg_c{color:#11C1F3;}
+.medimg_c{color:#11C1F3;}
+.lowimg_c{color:#11C1F3;}
+.offimg_c{color:#11C1F3;}
+
+/* button of three lines */
+.custom-button{color:#FFF;}
+.custom-button:hover{color:#FFF;}
+
+/* button color for login */
+.login-button{background-color:#1D4461; color:#FFF;}
+.login-button:hover{background-color:#1D4461; color:#FFF;}
+
+/* back button color */
+.button-clear.button-clear {color:#FFF;}
+.back-button{ color:#FFF;}
+.back-button:hover{ color:#FFF;}
+
+/* Ionic popup title for text */
+.popup-body {text-align:left; float:left}
+.popup-head{text-align:center; }
+
+.height_manage{height:120px;}
+
+/* amenites icon */
+.amenitiesIcon{background-image:url(../images/amenities.svg); background-repeat:no-repeat; height:30px; width:35px; background-position:center; background-position:top; }
+
+/* rootcontrol icon */
+.rootcontrolIcon{background-image:url(../images/wifi.png); background-repeat:no-repeat; height:30px; width:35px; background-position:center; background-position:center; }
+

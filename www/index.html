@@ -1,0 +1,734 @@
+<html ng-app="ionicApp">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width,">
+    <title>Side Menus</title>
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <link href="lib/ionic/css/ionic.min.css" rel="stylesheet">
+    <script src="lib/ionic/js/ionic.bundle.min.js"></script>
+    <script src="js/ng-cordova.min.js"></script>
+    <script src="cordova.js"></script>
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body class="platform-ios" ng-controller="MainCtrl">
+<ion-nav-bar class="header-bar">
+  <ion-nav-back-button class="button-icon ion-arrow-left-c back-button">
+  </ion-nav-back-button>
+</ion-nav-bar>
+         
+<ion-nav-view></ion-nav-view>
+
+<script id="sign-in.html" type="text/ng-template">
+  <ion-view view-title="Sign-In">
+	<ion-content>
+	<p class="text-center" style="margin-top:10px;">
+	  <img src="images/logo.svg" height="120px;" width="120px;">
+	</p>
+	<div class="list" style="margin-top:10px;">
+		<label class="item item-input">
+		  <span class="input-label">Username</span>
+		  <input type="text" ng-model="user.username">
+		</label>
+		<label class="item item-input">
+		  <span class="input-label">Password</span>
+		  <input type="password" ng-model="user.password">
+		</label>
+	</div>
+	<ul class="list">
+			<li class="item-checkbox">
+				 <label class="checkbox">
+				   <input type="checkbox" ng-model="user.remember">
+				 </label>
+			 Remember me
+			</li>
+	</ul>
+	<div>
+		<button class="button button-block login-button" ng-click="signIn(user)">
+		  Sign-In
+		</button>
+		<p class="text-center">
+		  <a href="#/forgot-password" style="text-decoration:none; color:#000">Forgot password?</a>
+		</p>
+		<hr style="width:75%">
+		<center><p><a href="#/signup" style="text-decoration:none; color:#000">Don't have an account? Sign Up Here</a><span style="display:none">'</span></p></center>
+	</div>
+	</ion-content>
+  </ion-view>
+</script>
+
+<script id="forgot-password.html" type="text/ng-template">
+  <ion-view view-title="Forgot Password">
+	<ion-content>
+	<div class="padding">
+		<center><b>Can't sign in? Forgot your password?</b></center>
+		<hr style="width:75%">
+		<p>Enter your registered email address. we'll send you password reset instructions.</p>
+	</div>
+	  <p>
+	   	<div class="list" style="margin-top:10px;">
+		<label class="item item-input">
+		  <span class="input-label">Email</span>
+		  <input type="text" ng-model="user.email">
+		</label>
+		</div>
+		<div>
+		<button class="button button-block login-button" ng-click="forget(user)">
+		  Send me reset instructions
+		</button>
+		</div>
+	  </p>
+	</ion-content>
+  </ion-view>
+</script>
+
+<script id="signup.html" type="text/ng-template">
+  <ion-view view-title="Account Setup">
+	<ion-content>
+	<div class="padding">
+		<center><b>Create your account</b></center>
+		<hr style="width:75%">
+		<center>This is step 1.</center>
+	</div>
+	<ul class="list">
+		<label class="item item-input item-floating-label">
+			<span class="input-label" style="font-size:14px;">Thermostat Name</span>
+			<input type="text" placeholder="Enter Thermostat Name" ng-model="user.thermostatname">
+		</label>
+		<label class="item item-input item-floating-label">
+			<span class="input-label" style="font-size:14px;">Thermostat ID</span>
+			<input type="text" placeholder="Enter Thermostat ID" ng-model="user.thermostatid">
+		</label>
+		<label class="item item-input item-floating-label">
+			<span class="input-label" style="font-size:14px;">Location</span>
+			<input type="text" placeholder="Enter Location" ng-model="user.locationname">
+		</label>
+		<div>
+		<a href="" ng-click="firstvalidation(user)" class="button icon-right ion-chevron-right login-button"  style="margin-top:10px;">Next</a>
+	</ul>
+	</ion-content>
+  </ion-view>
+</script>
+
+<script id="signup2.html" type="text/ng-template">
+  <ion-view view-title="Account Information">
+	<ion-content>
+	<div class="padding">
+		<center><b>Your login details</b></center>
+		<hr style="width:75%">
+		<center>This is step 2.</center>
+	</div>
+	<ul class="list">
+		<label class="item item-input item-floating-label">
+			<span class="input-label" style="font-size:14px;">Username</span>
+			<input type="text" placeholder="Username" ng-model="user.username">
+		</label>
+		<label class="item item-input item-floating-label">
+			<span class="input-label" style="font-size:14px;">Email</span>
+			<input type="text" placeholder="Email" ng-model="user.email">
+		</label>
+		<label class="item item-input item-floating-label">
+			<span class="input-label" style="font-size:14px;">Password</span>
+			<input type="password" placeholder="Password" ng-model="user.password">
+		</label>
+		<label class="item item-input item-floating-label">
+			<span class="input-label" style="font-size:14px;">Confirm Password</span>
+			<input type="password" placeholder="Confirm Password" ng-model="user.cpassword">
+		</label>
+		<div>
+		<a href="" ng-click="secondvalidation(user)"  class="button icon-right ion-chevron-right login-button"  style="margin-top:10px;">Next</a>
+	</ul>
+	</ion-content>
+  </ion-view>
+</script>
+
+<script id="signup3.html" type="text/ng-template">
+  <ion-view view-title="Personal Details">
+	<ion-content>
+	<div class="padding">
+		<center><b>We will never sell it</b></center>
+		<hr style="width:75%">
+		<center>This is step 3.</center>
+	</div>
+	<ul class="list">
+		<label class="item item-input item-floating-label">
+			<span class="input-label" style="font-size:14px;">Company Name</span>
+			<input type="text" placeholder="Company Name" ng-model="user.companyname">
+		</label>
+		<label class="item item-input item-floating-label">
+			<span class="input-label" style="font-size:14px;">Phone</span>
+			<input type="text" placeholder="Phone" ng-model="user.phone">
+		</label>
+		<div>
+		<a href="" ng-click="thirdvalidation(user)" class="button  login-button" style="margin-top:10px;">Create</a>
+	</ul>
+	</ion-content>
+  </ion-view>
+</script>
+
+<script id="templates/event-menu.html" type="text/ng-template">
+  <ion-side-menus enable-menu-with-back-views="false">
+
+	<ion-side-menu-content>
+	  <ion-nav-bar class="header-bar">
+		<ion-nav-back-button>
+		</ion-nav-back-button>
+
+		<ion-nav-buttons side="left">
+		  <button class="button button-icon custom-button ion-navicon" menu-toggle="left">
+		  </button>
+		</ion-nav-buttons>
+	  </ion-nav-bar>
+
+	  <ion-nav-view name="menuContent"></ion-nav-view>
+	</ion-side-menu-content> 
+
+	<ion-side-menu side="left">
+	  <ion-header-bar class="bar-calm">
+		<h1 class="title">Menus</h1>
+	  </ion-header-bar>
+	  <ion-content>
+		<ul class="list">
+		  <!-- Note each link has the 'menu-close' attribute so the menu auto closes when clicking on one of these links -->
+		  <a href="#/event/check-in" class="item item-icon-left" menu-close><i class="icon ion-ios-speedometer-outline"></i>Dashboard</a>
+		  <a href="#/event/messages" class="item  item-icon-left" menu-close><i class="icon ion-ios-email-outline"></i>Messages</a>
+		  <a href="#/event/amenities" class="item  item-icon-left" menu-close><i class="icon amenitiesIcon"></i>Amenities</a>
+		  <a href="#/event/monitoring" class="item  item-icon-left" menu-close><i class="icon ion-eye"></i>Monitoring</a>
+		  <a href="#/event/attendees" class="item  item-icon-left" menu-close><i class="icon ion-social-rss-outline"></i>Root Control</a>
+		  <a href="#/event/sensorconfig" class="item  item-icon-left" menu-close><i class="icon ion-ios-gear-outline"></i>Sensor Configuration</a>
+		  <a href="#/event/setting" class="item  item-icon-left" menu-close><i class="icon ion-settings"></i>Settings</a>
+		  <a ng-click="logout()" class="item item-icon-left" menu-close><i class="icon ion-log-out"></i>Logout</a>
+		</ul>
+	  </ion-content>
+	</ion-side-menu>
+
+  </ion-side-menus>
+</script>
+
+<script id="templates/home.html" type="text/ng-template">
+  <ion-view view-title="[ root ]">
+	<ion-content class="padding">
+	  <p>Swipe to the right to reveal the left menu.</p>
+	  <p>(On desktop click and drag from left to right)</p>
+	</ion-content>
+  </ion-view>
+</script>
+
+<script id="templates/check-in.html" type="text/ng-template">
+ <ion-view view-title="Dashboard">
+     <ion-header-bar class="bar-stable" style="padding-top:38px;">
+		<a href="#/event/thermostat" style="padding-top:10px;"><button class="button button-icon ion-ios-arrow-back" ng-bind-html="themostatname"></button></a>
+		<a ui-sref="eventmenu.schedulelist({id:schedule_id})"  style="text-align:right; padding-top:10px;"><button class="button button-icon icon-right ion-ios-arrow-forward" ng-bind-html="schedulename"></button></a>
+	</ion-header-bar>
+	<ion-content>
+	<div id="hvac_desktop">
+		<div class="list" style="padding-top:35px;">
+			<div class = "row padding" style="text-align:center;">
+				<div class="col col-25"  style="margin-top:38px;">
+					<a class="{{securityclass}}" ng-click="changesecurity()">
+					<br><span ng-bind-html="securitytext" style="font-size:16px;">Arm</span></a>
+				</div>
+				<div class="col col-50" style="font-size:54px; text-align:center; border-radius:100%; color:#000;">
+				<br><br><span style="font-size:87px;">{{response[0].hvac_temprature}}&deg;</span><br><br>
+				</div>
+				<div class="col col-25" style="margin-top:px;">
+					<i class="button-clear button ion-ios-plus-empty  button-calm custom-icon1" ng-click="uptemp()" ></i>
+						<a style="font-size:38px; padding:15px 0px 25px 5px;"  ng-bind-html="setpointtemp">70</a>
+					<i class="button-clear button ion-ios-minus-empty  button-calm custom-icon1" ng-click="downtemp()" ></i>
+				</div>
+			</div>
+		</div>
+		<div class="list" style="margin-top:-50px;">
+			<div class="item item-divider" style="font-weight:bold; background-color:#1D4461; color:#FFF">
+				System Control
+			</div>
+			<div class = "row padding" style="text-align:center; margin-top:-14px;">
+				<div class="col col-25"><button class="button button-icon ion-ios-flame-outline custom-icon {{systemcontrolH}}" ng-click="changesystemcontrol('H')"><p style="font-size:14px;">Heat</p></button></div>
+				<div class="col col-25"><button class="button button-icon ion-ios-snowy custom-icon {{systemcontrolC}}" ng-click="changesystemcontrol('C')"><p style="font-size:14px;">Cool</p></button></div>
+				<div class="col col-25"><button class="button button-icon ion-ios-loop custom-icon {{systemcontrolA}}" ng-click="changesystemcontrol('A')"><p style="font-size:14px;">Auto</p></button></div>
+				<div class="col col-25"><button class="button button-icon ion-power custom-icon {{systemcontrolO}}" ng-click="changesystemcontrol('O')"><p style="font-size:14px;">Off</p></button></div>
+			</div>
+			<div class="item item-divider" style="font-weight:bold; background-color:#496880; color:#FFF; margin-top:-20px;">
+				Fan Control
+			</div>
+			<div class = "row padding" style="text-align:center;  margin-top:-14px;">
+				<div class="col col-25"><button class="button button-icon custom-icon {{fancontrolHimg}} " ng-click="changefancontrol('H')"><p style="font-size:14px; padding-top:35px;" class="{{fancontrolHcolor}}">High</p></button></div>
+				<div class="col col-25"><button class="button button-icon custom-icon {{fancontrolMimg}} " ng-click="changefancontrol('M')"><p style="font-size:14px; padding-top:35px;" class="{{fancontrolMcolor}}">Medium</p></button></div>
+				<div class="col col-25"><button class="button button-icon custom-icon {{fancontrolLimg}}" ng-click="changefancontrol('L')"><p style="font-size:14px; padding-top:35px;" class="{{fancontrolLcolor}}">Low</p></button></div>
+				<div class="col col-25"><button class="button button-icon custom-icon {{fancontrolOimg}}" ng-click="changefancontrol('O')"><p style="font-size:14px; padding-top:35px; padding-left:4px;" class="{{fancontrolOcolor}}">Off </p></button></div>
+			</div>
+		</div>
+	</div>
+	</ion-content>
+  </ion-view>
+</script>
+
+<script id="templates/thermostat.html" type="text/ng-template">
+	<ion-view view-title="Location List" padding-vertical="10px">
+		<ion-content class="has-header">
+            <ul class="list">
+                <a href="" class="item item-icon-right"  menu-close ng-click="thermostatlist({{data.uml_location_id}})" ng-repeat="data in response">
+					<li class="item-checkbox">
+						{{data.location_name}}
+						<i class="icon ion-ios-arrow-right"></i>
+					</li>
+                </a>
+            </ul>
+        </ion-content>
+	</ion-view>
+</script>
+
+<script id="templates/thermostatlist.html" type="text/ng-template">
+	<ion-view view-title="Thermstat List" padding-vertical="10px" side="right">
+		<ion-content class="has-header">
+            <div id="hvac_desktop">
+                <div class="list">
+                    <label class="item item-radio"  ng-repeat="data in response">
+                    <a href="#/event/check-in" menu-close ng-click="thermstat({{data.therm_id}},data.thermostat_name)">
+                        <input type="radio" name="group">
+                        <div class="item-content">
+                           {{data.thermostat_name}}
+                        </div>
+                        <i class="radio-icon ion-checkmark"></i>
+                    </a>
+                    </label>
+                </div>
+            </div>
+        </ion-content>
+	</ion-view>
+</script>
+
+<script id="templates/schedulelist.html" type="text/ng-template">
+	<ion-view view-title="Schedule List" padding-vertical="10px" side="right">
+		<ion-content class="has-header">
+            <div class="list">
+            <a href="#/event/check-in" ng-click="refreshschedule(item.value)" ng-repeat="item in clientSideList" menu-close>
+                <ion-radio  ng-value="item.value" ng-model="data.clientSide"  >
+                    {{ item.text }}
+                </ion-radio>
+            </a>
+            </div>
+        </ion-content>
+	</ion-view>
+</script>
+
+<script id="templates/messages.html" type="text/ng-template">
+	<ion-view view-title="Messages">
+		<ion-content class="has-header">
+            <ul class="list">
+                <li class="item">
+                    <a href="#/event/compose" class="item-icon-left item-icon-right"><i class="button icon ion-ios-compose-outline button-clear button-positive" style="padding-top:8px;"></i> Compose
+                         <i class="icon ion-ios-arrow-right"></i>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="#/event/receive" class="item-icon-left item-icon-right"><i class="button icon ion-ios-email-outline button-clear button-positive" style="padding-top:8px;"></i> Inbox
+                         <i class="icon ion-ios-arrow-right"></i>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="#/event/sent" class="item-icon-left item-icon-right"><i class="button icon ion-ios-paperplane-outline button-clear button-positive" style="padding-top:8px;"></i> Sent
+                         <i class="icon ion-ios-arrow-right"></i>
+                    </a>
+                </li>
+			</ul>
+        </ion-content>
+	</ion-view>
+</script>
+
+
+<script id="templates/compose.html" type="text/ng-template">
+	<ion-view view-title="Compose">
+	  <ion-content>
+			<fancy-select
+						  header-text="Select Thermostat"
+						  allow-empty='false'
+						  value="val.multiple"
+						  text="countries_text_multiple"
+						  items="countries"
+						  multi-select="true"            
+						  >
+			</fancy-select>
+			 <div class="row">
+			  <div class="col"> 
+				<label class="item item-input text">
+				  <textarea rows="1" name="description" style="height:250px;" ng-model="user.msgvalue"></textarea>
+				</label>
+				
+			  </div>
+			</div>
+			<div class="row">
+			<button class="button button-block button-light" ng-click="sendmessage(user)">
+			  Send  <i class="icon ion-ios-paperplane-outline"></i>
+			</button>
+			</div>
+		</ion-content>
+	</ion-view>
+</script>
+
+<script id="fancy-select.html" type="text/ng-template">
+	<ion-list>
+	  <ion-item class="item-text-wrap" ng-click="showItems($event)">
+		{{text}}
+		<span class="item-note">
+		  {{noteText}}
+		  <img class="{{noteImgClass}}" ng-if="noteImg != ''" src="{{noteImg}}" />
+		</span>
+	  </ion-item>
+	</ion-list>
+</script>
+
+<script id="fancy-select-items.html" type="text/ng-template">
+	<ion-view class="fancy-select-items modal">
+	  <ion-header-bar class="bar-positive">
+	
+		<button ng-click="hideItems()" class="button button-positive button-icon ion-ios-arrow-back"></button>
+	
+		<h1 class="title">{{headerText}}</h1>
+	
+		<button ng-click="validate()" class="button button-positive button-icon ion-checkmark"></button>
+	
+	  </ion-header-bar>
+	  <ion-content>
+		<div class="list">
+		  <!-- Multi select -->
+		  <ion-checkbox
+					  ng-repeat="item in items"
+					  ng-if="multiSelect"
+					  ng-checked="item.checked"
+					  ng-model="item.checked"
+					  class="item item-text-wrap">
+			{{item.text}}
+		  </ion-checkbox>
+		</div>
+	  </ion-content>
+	</ion-view>
+</script>
+    
+<script id="templates/receive.html" type="text/ng-template">
+	  <ion-view title="Inbox">
+		<ion-header-bar class="bar-subheader item-input-inset">
+		<label class="item-input-wrapper">
+		  <i class="icon ion-ios7-search placeholder-icon"></i>
+		  <input type="search" placeholder="Search" ng-model="msgfilter" ng-change="scrollTop()">
+			</label>
+		  </ion-header-bar>
+
+		<ion-nav-buttons side="right">
+			<button class="button button-block login-button" ng-click="scrollBottom()" style="margin-top:-0px;">
+				Go To Bottom
+			</button>
+		</ion-nav-buttons>
+
+		 <ion-content>
+			<ion-list>
+				<ion-item ng-repeat="item in items | filter:msgfilter  track by $index" ng-click="showinboxmsg(item.msg,item.sentby,item.sentdate)">
+					{{item.msg}}
+				</ion-item>
+			</ion-list>
+				<ion-infinite-scroll  on-infinite="loadMore1()" distance="90%"></ion-infinite-scroll>
+		</ion-content>
+	  </ion-view>
+</script>
+    
+<script id="templates/sent.html" type="text/ng-template">
+  <ion-view title="Sent">
+		<ion-header-bar class="bar-subheader item-input-inset">
+		<label class="item-input-wrapper">
+		  <i class="icon ion-ios7-search placeholder-icon"></i>
+		  <input type="search" placeholder="Search" ng-model="searchFilter"  ng-change="scrollTop()">
+			</label>
+		  </ion-header-bar>
+
+		<ion-nav-buttons side="right">
+			<button class="button button-block login-button" ng-click="scrollBottom()" style=" margin-top:-0px;">
+			Go To Bottom
+			</button>
+		</ion-nav-buttons>
+
+		 <ion-content>
+			<ion-list>
+				<ion-item ng-repeat="item in items | filter:searchFilter  track by $index" ng-click="showsentmsg(item.msg,item.sentdate,item.list)">
+					{{item.msg}}
+				</ion-item>
+			</ion-list>
+				<ion-infinite-scroll  on-infinite="loadMore()" distance="30%"></ion-infinite-scroll>
+		</ion-content>
+  </ion-view>
+</script>
+
+<script id="templates/amenities.html" type="text/ng-template">
+  	<ion-view view-title="Amenities">
+		<ion-content class="has-header">
+		<div ng-if="response != 'no'">
+			<div class="list">
+				<a class="item" ng-repeat="data in response" ng-click="changeamenities(data.amt_url)">
+					{{data.amt_name}}
+				</a>
+			</div>
+		</div>
+		<div class="bar" ng-if="response == 'no'">
+			<h1 class="title">No Amenities</h1>
+		</div>
+		</ion-content>
+	</ion-view>
+</script>
+
+<script id="templates/monitoring.html" type="text/ng-template">
+  	<ion-view view-title="Monitoring">
+		<ion-content class="has-header">
+		<div ng-if="response != 'no'">
+			<div class="list">
+				<a class="item" ng-click="showmonitoring('http://egauge16871.egaug.es/')">
+					Meter1
+				</a>
+			</div>
+		</div>
+		</ion-content>
+	</ion-view>
+</script>
+
+<script id="templates/sensorconfig.html" type="text/ng-template">
+  	<ion-view view-title="Sensor Configuration">
+		<ion-content class="has-header">
+		<ion-refresher on-refresh="refreshsensorconfiglist()">
+		</ion-refresher>
+		<div class="list">
+			<div class="item row padding" ng-repeat="item in response"  ng-if="response != 'City'">
+				<div class="col">{{item.sensor_id}}</div>
+				<div class="col">{{item.sensor_type}}</div>
+				<div class="col">
+					<a class="item-icon-right">
+						<i class="icon ion-compose"  ng-click="editsensor(item.sensor_id,item.sensor_type,item.sensor_name,item.room_id,item.schedule_id,item.sensor_active_yn,item.sensor_min_temp,item.sensor_max_temp)"></i>
+					</a>
+				</div>
+ 			</div>
+			<div class="item"  ng-if="response == 'City'">
+				<h2><center>No device to configure</center></h2>
+			</div>
+		</div>
+		</ion-content>
+	</ion-view>
+</script>
+
+<script id="templates/modal.html" type="text/ng-template">
+  <ion-modal-view>
+	<ion-header-bar class="header-bar">
+	  <h1 class="title" style="color:#FFF">Edit Sensor</h1>
+	  <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
+	</ion-header-bar>
+	<ion-content>
+	  <div class="list">
+	  <label class="item item-input">
+		  <span class="input-label">Device ID</span>
+		  <input ng-model="user.deviceid" disabled type="text">
+		</label>
+		<label class="item item-input">
+		  <span class="input-label">Type</span>
+		  <input ng-model="user.type" disabled type="text">
+		</label>
+		<label class="item item-input">
+		  <span class="input-label">Device</span>
+		  <input ng-model="user.device" type="text">
+		</label>
+		<label class="item item-input">
+		  <span class="input-label">Room</span>
+		  	<select ng-model="user.r_id">
+				<option ng-selected="respone.room_id == user.s_room"  ng-repeat="respone in response_room" value="{{respone.room_id}}">
+					{{respone.room_name}}
+				</option>
+			</select>
+		</label>
+		<label class="item item-input">
+		  <span class="input-label">Schedule</span>
+		  	<select ng-model="user.s_id">
+				<option ng-selected="respone.schedule_id == user.s_schedule" ng-repeat="respone in response_schedule" value="{{respone.schedule_id}}">
+					{{respone.schedule_name}}
+				</option>
+			</select>
+		</label>
+		<label class="item item-input">
+			<span class="input-label">Min temp</span>
+			<input ng-model="user.mint" type="tel">
+		</label>
+		<label class="item item-input">
+			<span class="input-label">Max temp</span>
+			<input ng-model="user.maxt" type="tel">
+		</label>
+		<br>
+		<ul class="list">
+			<li class="item-checkbox">
+				 <label class="checkbox">
+				   <input type="checkbox" ng-model="user.activeyn">
+				 </label>
+			 Active
+			</li>
+		</ul>
+		<button class="button button-block login-button" ng-click="updatesensor(user)">
+				Save Changes
+		</button>
+	  </div>
+	</ion-content>
+  </ion-modal-view>
+</script>
+
+<script id="templates/attendees.html" type="text/ng-template">
+  <ion-view view-title="Root Control">
+  <ion-content>
+	<div id="rootcontrol_desktop">
+		<ion-refresher on-refresh="doRefresh()">
+		</ion-refresher>
+			<div class="list" style="padding-top:0px;">
+			<div ng-repeat="group in response"  ng-if="response != 'City'">
+				<ion-item class="item-stable item" ng-click="toggleGroup(group)" ng-class="{active: isGroupShown(group)}">
+					<i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"></i>
+					{{group.room_name}}
+				</ion-item>
+				<ion-item  class="item-accordion item item-divider" ng-repeat="item in group.sensor_details" ng-show="isGroupShown(group)">
+					<a style="font-size:14px; padding:5px 5px 5px 5px;" ui-sref="eventmenu.detail({sensor_id: item.sensor_id,sensor_type:item.sensor_type,sensor_name:item.sensor_name,schedule_name:item.schedule_name,sensor_type_id:item.sensor_type_id,sensor_status:item.sensor_status})" class="item-icon-right item-icon-right">
+						&nbsp;&nbsp;&nbsp;{{item.sensor_id}}&nbsp;&nbsp;{{item.sensor_type}}
+						<i class="icon ion-ios-arrow-right icon-right"></i>
+					</a>
+				</ion-item>
+			</div>
+			<div class="item"  ng-if="response == 'City'">
+				<h2><center>No Device Configured</center></h2>
+			</div>
+		  </div>
+	  </div>
+	</ion-content>
+  </ion-view>
+</script>
+
+<script id="templates/detail.html" type="text/ng-template">
+<ion-view title="">
+<br/>
+<ion-content>
+
+<div class="list">
+	<label class="item item-input" style="height:40px;">
+		<div class="input-label" style=" width: 50%;">
+			<div class="col col-50">
+				<b>Sensor ID</b>
+			</div>
+		</div>
+		{{response}}
+	</label>
+	<label class="item  item-input" style="height:40px;">
+		<div class=" input-label" style=" width: 50%;">
+			<div class="col col-50">
+				<b>Device</b>
+			</div>
+		</div>
+		{{response2}}
+	</label>
+	<label class="item  item-input" style="height:40px;">
+		<div class=" input-label" style=" width: 50%;">
+			<div class="col col-50">
+				<b>Type</b>
+			</div>
+		</div>
+		{{response1}}
+	</label>
+	<label class="item item-input" style="height:40px;">
+		<div class=" input-label" style=" width: 50%;">
+			<div class="col col-50">
+				<b>Schedule</b>
+			</div>
+		</div>
+		{{response3}}
+	</label>
+	<label class="item item-input" style="height:40px;">
+		<div class=" input-label" style=" width: 50%;">
+			<div class="col col-50">
+				<b>Status</b>
+			</div>
+		</div>
+	
+		<label class="toggle" ng-if="response4 == '1'">
+		   <img class="title" ng-if="response5 == 'On'" src="images/sensoricon/rockeron.png">
+		   <img class="title" ng-if="response5 != 'On'" src="images/sensoricon/rockeroff.png">
+		</label>
+		
+		<label class="toggle"  ng-if="response4 == '2'">
+			<input type="checkbox" checked  ng-if="response5 == 'On'">
+			<div class="track" ng-if="response5 == 'On'">
+				<div class="handle"></div>
+			</div>
+			<input type="checkbox" checked  ng-if="response5 != 'On'">
+			<div class="track" ng-if="response5 != 'On'">
+				<div class="handle"></div>
+			</div>
+		</label>
+		
+		<label class="toggle" ng-if="response4 == '3'">
+		   <img class="title" ng-if="response5 == 'Open'" src="images/sensoricon/wopen.png">
+		   <img class="title" ng-if="response5 != 'Open'" src="images/sensoricon/wclosed.png">
+		</label>
+		
+		<label class="toggle"  ng-if="response4 == '4'">
+		   <img class="title" ng-if="response5 != 'Open'" src="images/sensoricon/tempsensor.png">{{response5}}
+		</label>
+		
+		<label class="toggle"  ng-if="response4 == '5'">
+		   <img class="title" ng-if="response5 == 'UnOccupied'" src="images/sensoricon/unoccupied.png">
+		   <img class="title" ng-if="response5 != 'UnOccupied'" src="images/sensoricon/occupied.png">
+		</label>
+	</label>
+</div>
+</ion-content>
+</ion-view>
+</script> 
+
+<script id="templates/setting.html" type="text/ng-template">
+<ion-view view-title="Settings">
+	<ion-content class="has-header">
+		<ul class="list">
+			<li class="item item-toggle">
+			 Get Notifications
+			 <label class="toggle toggle-calm">
+			   <input type="checkbox" checked="checked">
+			   <div class="track">
+				 <div class="handle"></div>
+			   </div>
+			 </label>
+		  	</li>
+			<li><a href="#/event/changepassword" class="item item-icon-right">Change Password</a></li>
+		</ul>
+	</ion-content>
+</ion-view>
+</script>
+
+<script id="templates/changepassword.html" type="text/ng-template">
+<ion-view view-title="Change Password">
+	<ion-content class="has-header">
+		<ul class="list">
+			<label class="item item-input item-floating-label">
+				<span class="input-label" style="font-size:14px;">Old Password</span>
+				<input type="password" placeholder="Old Password" ng-model="user.opassword">
+			</label>
+			<label class="item item-input item-floating-label">
+				<span class="input-label" style="font-size:14px;">New Password</span>
+				<input type="password" placeholder="New Password" ng-model="user.npassword">
+			</label>
+			<label class="item item-input item-floating-label">
+				<span class="input-label" style="font-size:14px;">Confirm Password</span>
+				<input type="password" placeholder="Confirm Password" ng-model="user.cpassword">
+			</label>
+			<div>
+			<button class="button button-block login-button" ng-click="changepassword(user)">
+					Save Changes
+			</button>
+			</div>
+		</ul>
+	</ion-content>
+</ion-view>
+</script>
+
+<div class="bar bar-footer footer-bar" style="height:15px;">
+  		<!--<div class="title">My Program</div>-->
+</div>
+<script src="js/app.js"></script>
+<script src="js/controller.js"></script>
+<body>
+</html>
