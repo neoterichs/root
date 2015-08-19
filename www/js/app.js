@@ -1,6 +1,6 @@
 // JavaScript Document
-var globalip = "192.168.1.3:1837";
-//var globalip = "50.116.21.72:1837";
+//var globalip = "192.168.1.3:1837";
+var globalip = "50.116.21.72:1837";
 var token = "";
 angular.module('ionicApp', ['ionic','ngCordova','starter.controllers'])
 .config(function($stateProvider, $urlRouterProvider) {
