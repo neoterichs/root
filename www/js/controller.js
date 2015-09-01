@@ -814,7 +814,7 @@ angular.module('starter.controllers', [])
 	});
 	
 	$scope.changeamenities = function(url){
-		var ref = window.open(url,'_blank','location=no'); 
+		var ref = window.open(url,'_blank','location=yes'); 
 		ref.show();
 		return false;
 	}
@@ -845,7 +845,7 @@ angular.module('starter.controllers', [])
 
 .controller('monitoringCtrl', function($scope, $stateParams) {
 	$scope.showmonitoring = function(url){
-		var ref = window.open(url,'_blank','location=no'); 
+		var ref = window.open(url,'_blank','location=yes'); 
 		return false;
 	}
 })
