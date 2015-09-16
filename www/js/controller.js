@@ -89,7 +89,9 @@ angular.module('starter.controllers', [])
 						localStorage.setItem("thermame",response[0].thermostat_name);
 						localStorage.setItem("thermid",response[0].therm_id);
 						localStorage.setItem("token",response[0].token);
+						localStorage.setItem("therm_online",response[0].online);
 						$rootScope.$broadcast('eventThermname',{thermname:response[0].thermostat_name,thermid:response[0].therm_id});
+						
 						$state.go('eventmenu.checkin');
 					}
 					else{
@@ -426,16 +428,17 @@ angular.module('starter.controllers', [])
 						$scope.countries[i].checked = false;
 					}
 				}
+				
 				$scope.user = {msgvalue: ""};
 				$ionicPopup.show({
 					template: '',
 					title: 'Message sent',
 					scope: $scope,
 					buttons: [
-					{ 
-					  text: 'Ok',
-					  type: 'button-assertive'
-					},
+						{ 
+						  text: 'Ok',
+						  type: 'button-assertive'
+						},
 					]
 				})
 			});
@@ -725,6 +728,12 @@ angular.module('starter.controllers', [])
 
 
 .controller('MyCtrl1', function($scope,$http,$ionicModal,$rootScope) {
+	var thermonoff = localStorage.getItem("therm_online");
+	if(thermonoff == "N"){
+		console.log("thermostat off");
+		$("#hvac_desktop").css({"pointer-events":"none","opacity":"0.4"});
+		$("#rootcontrol_desktop").css({"pointer-events":"none","opacity":"0.4"});
+	}
   	var slocid = localStorage.getItem("slocid");
 	var orgid = localStorage.getItem("orgid");
 	var thermid = localStorage.getItem("thermid");
@@ -814,7 +823,7 @@ angular.module('starter.controllers', [])
 	});
 	
 	$scope.changeamenities = function(url){
-		var ref = window.open(url,'_blank','location=yes'); 
+		var ref = window.open(url,'_blank','location=no'); 
 		ref.show();
 		return false;
 	}
@@ -845,7 +854,7 @@ angular.module('starter.controllers', [])
 
 .controller('monitoringCtrl', function($scope, $stateParams) {
 	$scope.showmonitoring = function(url){
-		var ref = window.open(url,'_blank','location=yes'); 
+		var ref = window.open(url,'_blank','location=no'); 
 		return false;
 	}
 })
@@ -963,9 +972,15 @@ angular.module('starter.controllers', [])
 	};
 })
 
-.controller('CheckinCtrl', function($scope,$http,$rootScope,CalcService) {
-	
+.controller('CheckinCtrl', function($scope,$http,$rootScope,CalcService,$ionicPopup) {
 	CalcService.connect();
+	var thermonoff = localStorage.getItem("therm_online");
+	
+	if(thermonoff == "N"){
+		console.log("thermostat off");
+		$("#hvac_desktop").css({"pointer-events":"none","opacity":"0.4"});
+		$("#rootcontrol_desktop").css({"pointer-events":"none","opacity":"0.4"});
+	}
 	
 	$scope.dashboardload = function(){
 		var slocid = localStorage.getItem("slocid");
@@ -1276,7 +1291,9 @@ angular.module('starter.controllers', [])
 	
 	//event if thermostat is offline
 	$rootScope.$on('eventWatcher', function (event) {
+		console.log("2");
 		$("#rootcontrol_desktop").css({"pointer-events":"none","opacity":"0.4"});
+		$("#hvac_desktop").css({"pointer-events":"none","opacity":"0.4"});
 		//console.log($scope.schedulename);
 	});
 	
