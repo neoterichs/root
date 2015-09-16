@@ -573,6 +573,8 @@ angular.module('starter.controllers', [])
 
 
 .controller('sensorconfigCtrl', function($scope,$http,$ionicModal,$rootScope,$ionicPopup) {
+	var sensortype_id = "";
+	
   	var slocid = localStorage.getItem("slocid");
 	var orgid = localStorage.getItem("orgid");
 	var thermid = localStorage.getItem("thermid");
@@ -613,7 +615,19 @@ angular.module('starter.controllers', [])
 		else $scope.response_schedule = "City";
 	});
 	
-	$scope.editsensor = function(sid,type,devicename,roomid,scheduleid,activeyn,mintemp,maxtemp){
+	//for get logic board
+	var data_parameters = "slocid="+slocid+ "&orgid="+orgid;
+	$http.post("http://"+globalip+"/get_logic",data_parameters, {
+		headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+	})
+	.success(function(response) {
+		if(response[0].status != "N")$scope.response_logicboard = response;
+		else $scope.response_logicboard = "City";
+	});
+	
+	$scope.editsensor = function(sid,type,devicename,roomid,scheduleid,activeyn,mintemp,maxtemp,sensor_type_id,logicid){
+		console.log(logicid);
+		sensortype_id = sensor_type_id;
 		var activeynt;
 		if(activeyn == "Y")activeynt = true;
 		else activeynt = false;
@@ -623,11 +637,14 @@ angular.module('starter.controllers', [])
 			device: devicename,
 			s_room: roomid,
 			s_schedule: scheduleid,
+			s_logicid: logicid,
 			activeyn: activeynt,
 			r_id:roomid,
 			s_id:scheduleid,
+			l_id:logicid,
 			mint:mintemp,
-			maxt:maxtemp
+			maxt:maxtemp,
+			s_type_id:sensor_type_id
 		};
 		$scope.modal.show();
 	}
@@ -638,38 +655,74 @@ angular.module('starter.controllers', [])
 		var thermid = localStorage.getItem("thermid");
 		var userid = localStorage.getItem("userid");
 		
+		var flag = 0;
+		if(sensortype_id != "2" || sensortype_id != "4"){
+			if(user.device == ""){
+				$ionicPopup.show({
+				  template: '',
+				  title: 'Please fill all the fields.',
+				  scope: $scope,
+				  buttons: [
+					{ 
+					  text: 'Ok',
+					  type: 'button-assertive'
+					},
+				  ]
+				})
+				flag = 1;
+			}
+		}
 		
-		if(user.device == "" || user.maxt == "" || user.mint == "" || user.mint == null || user.maxt == null){
-			$ionicPopup.show({
-			  template: '',
-			  title: 'Please fill all the fields.',
-			  scope: $scope,
-			  buttons: [
-				{ 
-				  text: 'Ok',
-				  type: 'button-assertive'
-				},
-			  ]
-			})
+		if(sensortype_id == "4"){
+			if(user.maxt == "" || user.mint == "" || user.mint == null || user.maxt == null){
+				$ionicPopup.show({
+				  template: '',
+				  title: 'Please fill all the fields.',
+				  scope: $scope,
+				  buttons: [
+					{ 
+					  text: 'Ok',
+					  type: 'button-assertive'
+					},
+				  ]
+				})
+				flag = 1;
+			}
+			if(user.mint > user.maxt){
+				$ionicPopup.show({
+				  template: '',
+				  title: 'Low temperature should be less than High temperature.',
+				  scope: $scope,
+				  buttons: [
+					{ 
+					  text: 'Ok',
+					  type: 'button-assertive'
+					},
+				  ]
+				})
+				flag = 1;
+			}
 		}
-		else if(user.mint > user.maxt){
-			$ionicPopup.show({
-			  template: '',
-			  title: 'Low temperature should be less than High temperature.',
-			  scope: $scope,
-			  buttons: [
-				{ 
-				  text: 'Ok',
-				  type: 'button-assertive'
-				},
-			  ]
-			})
-		}
-		else{
+		
+		if(flag == 0){
 			if(user.activeyn)activeynt = "Y";
 			else activeynt = "N";
-		
-			var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+ "&sensorid="+user.deviceid+ "&sensorname="+user.device+ "&scheduleid="+user.s_id+ "&maxtemp="+user.maxt+ "&mintemp="+user.mint+ "&id="+userid+ "&sensoractiveyn="+activeynt+ "&roomid="+user.r_id;
+			
+			var maxtemp = 0;
+			var mintemp = 0;
+			var schedule_id = 0;
+			var logic_id = 0;
+			
+			if(sensortype_id == "4"){
+				maxtemp = user.maxt;
+				mintemp = user.mint;
+				schedule_id = user.s_id;
+			}
+			if(sensortype_id == "2"){
+				logic_id = user.l_id;
+			}
+			
+			var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+ "&sensorid="+user.deviceid+ "&sensorname="+user.device+ "&scheduleid="+schedule_id+ "&maxtemp="+maxtemp+ "&mintemp="+mintemp+ "&id="+userid+ "&sensoractiveyn="+activeynt+ "&roomid="+user.r_id+ "&logicid="+logic_id;
 			//alert(data_parameters);
 			$http.post("http://"+globalip+"/edit_sensor",data_parameters, {
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
@@ -681,7 +734,20 @@ angular.module('starter.controllers', [])
 				})
 				.success(function(response) {
 					$scope.modal.hide();
-					if(response[0].status != "N")$scope.response = response;
+					if(response[0].status != "N"){
+						$scope.response = response;
+						$ionicPopup.show({
+						  template: '',
+						  title: 'Sensor updated successfully',
+						  scope: $scope,
+						  buttons: [
+							{ 
+							  text: 'Ok',
+							  type: 'button-assertive'
+							},
+						  ]
+						})
+					}
 					else $scope.response = "City";
 				});
 			});

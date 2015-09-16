@@ -499,7 +499,7 @@
 				<div class="col">{{item.sensor_type}}</div>
 				<div class="col">
 					<a class="item-icon-right">
-						<i class="icon ion-compose"  ng-click="editsensor(item.sensor_id,item.sensor_type,item.sensor_name,item.room_id,item.schedule_id,item.sensor_active_yn,item.sensor_min_temp,item.sensor_max_temp)"></i>
+						<i class="icon ion-compose"  ng-click="editsensor(item.sensor_id,item.sensor_type,item.sensor_name,item.room_id,item.schedule_id,item.sensor_active_yn,item.sensor_min_temp,item.sensor_max_temp,item.sensor_type_id,item.logic_id)"></i>
 					</a>
 				</div>
  			</div>
@@ -539,7 +539,7 @@
 				</option>
 			</select>
 		</label>
-		<label class="item item-input">
+		<label class="item item-input" ng-if="user.s_type_id == '4'">
 		  <span class="input-label">Schedule</span>
 		  	<select ng-model="user.s_id">
 				<option ng-selected="respone.schedule_id == user.s_schedule" ng-repeat="respone in response_schedule" value="{{respone.schedule_id}}">
@@ -547,13 +547,21 @@
 				</option>
 			</select>
 		</label>
-		<label class="item item-input">
+		<label class="item item-input" ng-if="user.s_type_id == '4'">
 			<span class="input-label">Min temp</span>
 			<input ng-model="user.mint" type="tel">
 		</label>
-		<label class="item item-input">
+		<label class="item item-input" ng-if="user.s_type_id == '4'">
 			<span class="input-label">Max temp</span>
 			<input ng-model="user.maxt" type="tel">
+		</label>
+		<label class="item item-input" ng-if="user.s_type_id == '2'">
+		  <span class="input-label">Logicboard</span>
+		  	<select ng-model="user.l_id">
+				<option ng-selected="respone.logic_id == user.s_logicid" ng-repeat="respone in response_logicboard" value="{{respone.logic_id}}">
+					{{respone.logic_name}}
+				</option>
+			</select>
 		</label>
 		<br>
 		<ul class="list">
