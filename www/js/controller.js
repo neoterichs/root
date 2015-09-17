@@ -19,6 +19,7 @@ angular.module('starter.controllers', [])
 	
 	$scope.logout = function() {
 		localStorage.setItem("userid",-1);
+		localStorage.setItem("logoutyn",1);
 		localStorage.setItem("slocid",-1);
 		localStorage.setItem("orgid",-1);
 		localStorage.setItem("thermame",-1); 
@@ -35,7 +36,9 @@ angular.module('starter.controllers', [])
 .controller('SignInCtrl', function($scope,$state,$http,$ionicPopup,$rootScope) {
 	var userid = localStorage.getItem("userid");
 	var username = localStorage.getItem("localusername");
-	if((username != null) && (username != -1)){
+	var logoutyn = localStorage.getItem("logoutyn");
+	if(logoutyn != 1)localStorage.setItem("logoutyn",0);
+	if((username != null) && (username != -1) && (logoutyn != 1)){
 		var password = localStorage.getItem("localpassword");
 		var data_parameters = "username="+username+ "&password="+password;
 		$http.post("http://"+globalip+"/userauth",data_parameters, {
