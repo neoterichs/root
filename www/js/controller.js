@@ -40,7 +40,7 @@ angular.module('starter.controllers', [])
 	var logoutyn = localStorage.getItem("logoutyn");
 	console.log(username);
 	console.log(logoutyn);
-	if((username != null) && (username != -1) && (logoutyn != 1)){
+	if((username != null) && (username != -1) || (logoutyn != 1)){
 		var password = localStorage.getItem("localpassword");
 		var data_parameters = "username="+username+ "&password="+password;
 		$http.post("http://"+globalip+"/userauth",data_parameters, {
