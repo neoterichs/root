@@ -36,8 +36,8 @@ angular.module('starter.controllers', [])
 .controller('SignInCtrl', function($scope,$state,$http,$ionicPopup,$rootScope) {
 	var userid = localStorage.getItem("userid");
 	var username = localStorage.getItem("localusername");
+	
 	var logoutyn = localStorage.getItem("logoutyn");
-	localStorage.setItem("logoutyn",0);
 	console.log(username);
 	console.log(logoutyn);
 	if((username != null) && (username != -1) && (logoutyn != 1)){
@@ -1056,6 +1056,7 @@ angular.module('starter.controllers', [])
 
 .controller('CheckinCtrl', function($scope,$http,$rootScope,CalcService,$ionicPopup) {
 	CalcService.connect();
+	localStorage.setItem("logoutyn",0);
 	var thermonoff = localStorage.getItem("therm_online");
 	
 	if(thermonoff == "N"){
