@@ -36,11 +36,10 @@ angular.module('starter.controllers', [])
 .controller('SignInCtrl', function($scope,$state,$http,$ionicPopup,$rootScope) {
 	var userid = localStorage.getItem("userid");
 	var username = localStorage.getItem("localusername");
-	
 	var logoutyn = localStorage.getItem("logoutyn");
 	console.log(username);
 	console.log(logoutyn);
-	if((username != null) && (username != -1) || (logoutyn != 1)){
+	if((username != null) && (username != -1) && (logoutyn != 1)){
 		var password = localStorage.getItem("localpassword");
 		var data_parameters = "username="+username+ "&password="+password;
 		$http.post("http://"+globalip+"/userauth",data_parameters, {
@@ -96,9 +95,9 @@ angular.module('starter.controllers', [])
 				.success(function(response) {
 					if(response[0].status == "Y"){
 						if(check){
-							localStorage.setItem("localusername",username);
 							localStorage.setItem("localpassword",password);
 						}
+						localStorage.setItem("localusername",username);
 						localStorage.setItem("userid", response[0].user_id);
 						localStorage.setItem("slocid",response[0].sloc_id);
 						localStorage.setItem("orgid", response[0].org_id);
