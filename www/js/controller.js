@@ -37,7 +37,9 @@ angular.module('starter.controllers', [])
 	var userid = localStorage.getItem("userid");
 	var username = localStorage.getItem("localusername");
 	var logoutyn = localStorage.getItem("logoutyn");
-	if(logoutyn != 1)localStorage.setItem("logoutyn",0);
+	localStorage.setItem("logoutyn",0);
+	console.log(username);
+	console.log(logoutyn);
 	if((username != null) && (username != -1) && (logoutyn != 1)){
 		var password = localStorage.getItem("localpassword");
 		var data_parameters = "username="+username+ "&password="+password;
