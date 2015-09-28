@@ -168,7 +168,6 @@
 
 <script id="templates/event-menu.html" type="text/ng-template">
   <ion-side-menus enable-menu-with-back-views="false">
-
 	<ion-side-menu-content>
 	  <ion-nav-bar class="header-bar">
 		<ion-nav-back-button>
@@ -191,17 +190,16 @@
 		<ul class="list">
 		  <!-- Note each link has the 'menu-close' attribute so the menu auto closes when clicking on one of these links -->
 		  <a href="#/event/check-in" class="item item-icon-left" menu-close><i class="icon ion-ios-speedometer-outline"></i>Dashboard</a>
-		  <a href="#/event/messages" class="item  item-icon-left" menu-close><i class="icon ion-ios-email-outline"></i>Messages</a>
-		  <a href="#/event/amenities" class="item  item-icon-left" menu-close><i class="icon amenitiesIcon"></i>Amenities</a>
-		  <a href="#/event/monitoring" class="item  item-icon-left" menu-close><i class="icon ion-eye"></i>Monitoring</a>
-		  <a href="#/event/attendees" class="item  item-icon-left" menu-close><i class="icon ion-social-rss-outline"></i>Root Control</a>
-		  <a href="#/event/sensorconfig" class="item  item-icon-left" menu-close><i class="icon ion-ios-gear-outline"></i>Sensor Configuration</a>
-		  <a href="#/event/setting" class="item  item-icon-left" menu-close><i class="icon ion-settings"></i>Settings</a>
+		  <a href="#/event/messages" class="item item-icon-left" menu-close><i class="icon ion-ios-email-outline"></i>Messages</a>
+		  <a href="#/event/amenities" class="item item-icon-left" menu-close><i class="icon amenitiesIcon"></i>Amenities</a>
+		  <a href="#/event/monitoring" class="item item-icon-left" menu-close><i class="icon ion-eye"></i>Monitoring</a>
+		  <a href="#/event/attendees" class="item item-icon-left" menu-close><i class="icon ion-social-rss-outline"></i>Root Control</a>
+		  <a href="#/event/sensorconfig" class="item item-icon-left" menu-close><i class="icon ion-ios-gear-outline"></i>Sensor Configuration</a>
+		  <a href="#/event/setting" class="item item-icon-left" menu-close><i class="icon ion-settings"></i>Settings</a>
 		  <a ng-click="logout()" class="item item-icon-left" menu-close><i class="icon ion-log-out"></i>Logout</a>
 		</ul>
 	  </ion-content>
 	</ion-side-menu>
-
   </ion-side-menus>
 </script>
 
@@ -303,7 +301,7 @@
 		<ion-content class="has-header">
             <div class="list">
             <a href="#/event/check-in" ng-click="refreshschedule(item.value)" ng-repeat="item in clientSideList" menu-close>
-                <ion-radio  ng-value="item.value" ng-model="data.clientSide"  >
+                <ion-radio  ng-value="item.value" ng-model="data.clientSide">
                     {{ item.text }}
                 </ion-radio>
             </a>
@@ -494,15 +492,19 @@
 		<ion-refresher on-refresh="refreshsensorconfiglist()">
 		</ion-refresher>
 		<div class="list">
-			<div class="item row padding" ng-repeat="item in response"  ng-if="response != 'City'">
-				<div class="col">{{item.sensor_id}}</div>
-				<div class="col">{{item.sensor_type}}</div>
-				<div class="col">
-					<a class="item-icon-right">
-						<i class="icon ion-compose"  ng-click="editsensor(item.sensor_id,item.sensor_type,item.sensor_name,item.room_id,item.schedule_id,item.sensor_active_yn,item.sensor_min_temp,item.sensor_max_temp,item.sensor_type_id,item.logic_id)"></i>
+			<div class="item row padding" style="margin-top: 0;padding-top: 5px;" ng-repeat="item in response"  ng-if="response != 'City'">
+				<div class="col-25">{{item.sensor_id}}</div>
+				<div class="col-25">{{item.sensor_type}}</div>
+				<div class="col-25">
+					<a class="item-icon-right" >
+						<i class="icon ion-compose" ng-click="editsensor(item.sensor_id,item.sensor_type,item.sensor_name,item.room_id,item.schedule_id,item.sensor_active_yn,item.sensor_min_temp,item.sensor_max_temp,item.sensor_type_id,item.logic_id)"></i>
 					</a>
-				</div>
- 			</div>
+					</div>
+			<div class="col-25">		
+					<a ui-sref="eventmenu.sensormapping({sensor_id: item.sensor_id,sensor_type_id:item.sensor_type_id})" class="item-icon"  ng-if="item.sensor_type_id == '2'">
+						<i class="icon ion-network item-icon-right" style="font-size:24px; margin-top:4px;" ></i>
+					</a>
+			</div>
 			<div class="item"  ng-if="response == 'City'">
 				<h2><center>No device to configure</center></h2>
 			</div>
@@ -578,6 +580,212 @@
 	  </div>
 	</ion-content>
   </ion-modal-view>
+</script>
+
+<script id="templates/sensormapping.html" type="text/ng-template">
+  	<ion-view view-title="Sensor Mapping">
+		<ion-content class="has-header">
+			<div class="list">
+				<div class="item item-divider">
+					<b>Sensor Mapping</b>
+				</div>
+				<label class="item item-input">
+				  <span class="input-label">Sensor</span>
+					<select ng-model="sensorid" ng-change="getid(sensorid)"  ng-if="response_unmapped != 'City'">
+						<option value="{{}}">Select sensor</option>
+						<option ng-repeat="respone in response_unmapped" value="{{respone.sensor_type_id}},{{respone.sensor_id}}">{{respone.sensor_name}}</option>
+					</select>
+					<input type="text" disabled ng-if="response_unmapped == 'City'" value="None"/>
+				</label> 
+				
+				<!--rokerswitch code-->
+				<div ng-if="sensor_id == '1'">
+					<div class="item item-divider">
+						Sensor status
+					</div>
+					<ion-radio ng-repeat="item in rokerList" ng-value="item.value" ng-model="data.rockerlist" ng-click="getselectboxval(sensorid,item.value)" >
+						{{ item.text }}
+					</ion-radio>
+				</div>
+				<!--occupancy code-->
+				<div ng-if="sensor_id == '5'">
+					<div class="item item-divider">
+						Sensor status
+					</div>
+					<ion-radio ng-repeat="item in occupancyList" ng-value="item.value" ng-model="data.occupancylist" ng-click="getselectboxval(sensorid,item.value)" >
+						{{ item.text }}
+					</ion-radio>
+				</div>
+				<!--door code-->
+				<div ng-if="sensor_id == '3'">
+					<div class="item item-divider">
+						Sensor status
+					</div>
+					<ion-radio ng-repeat="item in windowList" ng-value="item.value" ng-model="data.windowlist" ng-click="getselectboxval(sensorid,item.value)" >
+						{{ item.text }}
+					</ion-radio>
+				</div>
+				<!--Temperature code-->
+				<div ng-if="sensor_id == '4'">
+					<div class="item item-divider">
+						Set Point
+					</div>
+
+				  <label class="item item-input">
+				  	<div class="row">
+					  <div class="col col-75"><input type="text" id="setpointvalue" placeholder="Enter value"></div>
+					  <div class="col">
+					  	<select id="setpointrange">
+							<option value="H" ng-selected="selected">High</option>
+							<option value="L" >Low</option>
+						</select></div>
+					</div>
+					</label>
+				</div>
+				
+			  <label class="item">
+				<ul>
+				   <li class="item-toggle">
+					 Light status
+					 <label class="toggle toggle-balanced">
+					   <input type="checkbox" id="lightvalue">
+					   <div class="track">
+						 <div class="handle"></div>
+					   </div>
+					 </label>
+				  </li>
+				</ul>
+			  </label>
+			  	<button class="button button-block login-button" ng-click="getmapped(sensorid)">
+					Add
+				</button>
+				<ul class="list">
+					<li class="item">
+						<a ui-sref="eventmenu.sensormappinglist({sensor_id:data.sensor_light_id})" class="item-icon-left item-icon-right"><i class="button icon ion-network button-clear button-positive" style="padding-top:8px;"></i> Mapped sensor list
+							 <i class="icon ion-ios-arrow-right"></i>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</ion-content>
+	</ion-view>
+</script>
+
+<script id="templates/sensormappinglist.html" type="text/ng-template">
+  	<ion-view view-title="Sensor Mapping List">
+		<ion-content class="has-header">
+			<div class="list">
+				<div class="item row padding" ng-repeat="item in response"  ng-if="response != 'City'">
+					<div class="col">{{item.mapped_sensor_id}}</div>
+					<div class="col">{{item.mapped_sensor_name}}</div>
+					<div class="col">{{item.a_mapped_sensor_stat}}</div>
+					<div class="col">{{item.mapped_sensor_threshold}}</div>
+					<div class="col">{{item.a_sensor_status}}</div>
+					<div class="col">
+						<a class="item-icon-right">
+							<i class="icon ion-compose"  ng-click="show({{item.mapped_sensor_id}},'{{item.mapped_sensor_type}}','{{item.mapped_sensor_name}}',{{item.mapped_sensor_type_id}},'{{item.sensor_status}}','{{item.mapped_sensor_stat}}','{{item.mapped_sensor_threshold}}')"></i>
+						</a>
+					</div>
+				</div>
+				<div class="item"  ng-if="response == 'City'">
+					<h2><center>No device mapped</center></h2>
+				</div>
+			</div>
+		</ion-content>
+	</ion-view>
+</script>
+
+<script id="templates/editsensormapping.html" type="text/ng-template">
+	<ion-modal-view>
+		<ion-header-bar class="header-bar">
+		  <h1 class="title" style="color:#FFF">Edit Mapped Sensor</h1>
+		  <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
+		</ion-header-bar>
+		<ion-content>
+		 <div class="list">
+				<label class="item item-input">
+				  <span class="input-label">Sensor</span>
+					<input type="text" disabled ng-model="edit_mappedsensorid"/>
+				</label>
+				
+				<!--rokerswitch code-->
+				<div ng-if="sensor_id == '1'">
+					<div class="item item-divider">
+						Sensor status
+					</div>
+					<ion-radio ng-repeat="item in editrokerList" ng-value="item.value" ng-model="data.editrockerlist">
+						{{ item.text }}
+					</ion-radio>
+				</div>
+				<!--occupancy code-->
+				<div ng-if="sensor_id == '5'">
+					<div class="item item-divider">
+						Sensor status
+					</div>
+					<ion-radio ng-repeat="item in editoccupancyList" ng-value="item.value" ng-model="data.editoccupancylist">
+						{{ item.text }}
+					</ion-radio>
+				</div>
+				<!--door code-->
+				<div ng-if="sensor_id == '3'">
+					<div class="item item-divider">
+						Sensor status
+					</div>
+					<ion-radio ng-repeat="item in editwindowList" ng-value="item.value" ng-model="data.editwindowlist">
+						{{ item.text }}
+					</ion-radio>
+				</div>
+				<!--Temperature code-->
+				<div ng-if="sensor_id == '4'">
+					<div class="item item-divider">
+						Set Point
+					</div>
+
+				  <label class="item item-input">
+				  	<div class="row">
+					  <div class="col col-75"><input type="text" id="editsetpointvalue" ng-model="editthreshold" placeholder="Enter value"></div>
+					  <div class="col">
+					  	<select id="editsetpointrange">
+							<option value="H" ng-selected="selected">High</option>
+							<option value="L" >Low</option>
+						</select></div>
+					</div>
+					</label>
+				</div>
+				
+			  <label class="item">
+				<ul>
+				   <li class="item-toggle">
+					 Light status
+					 <label class="toggle toggle-balanced">
+					   <input type="checkbox" ng-model="data.editlightvalue1" id="editlightvalue" ng-checked="editlightvalue">
+					   <div class="track">
+						 <div class="handle"></div>
+					   </div>
+					 </label>
+				  </li>
+				</ul>
+			  </label>
+			  	<button class="button button-block login-button" ng-click="editgetmapped(sensor_id)">
+					Update
+				</button>
+			</div>
+		</ion-content>
+  	</ion-modal-view>
+</script>
+
+<script id="templates/monitoring.html" type="text/ng-template">
+  	<ion-view view-title="Monitoring">
+		<ion-content class="has-header">
+		<div ng-if="response != 'no'">
+			<div class="list">
+				<a class="item" ng-click="showmonitoring('http://egauge16871.egaug.es/')">
+					Meter1
+				</a>
+			</div>
+		</div>
+		</ion-content>
+	</ion-view>
 </script>
 
 <script id="templates/attendees.html" type="text/ng-template">

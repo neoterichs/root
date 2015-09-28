@@ -1014,6 +1014,259 @@ angular.module('starter.controllers', [])
 	};
 })
 
+.controller('sensormappingCtrl', function($scope,$http,$rootScope,$stateParams,$ionicPopup) {
+	$scope.rokerList = [{ text: "On", value: "1" },{ text: "Off", value: "0" }];
+	$scope.windowList = [{ text: "Open", value: "1" },{ text: "Close", value: "0" }];
+	$scope.occupancyList = [{ text: "Occupy", value: "1" },{ text: "Unoccupy", value: "0" }];
+	
+	$scope.data = {
+		sensor_light_id:$stateParams.sensor_id,
+		sensor_type_id:$stateParams.sensor_type_id,
+		rockerlist:"0",
+		occupancylist:"0",
+		windowlist:"0"
+	};
+	
+	var slocid = localStorage.getItem("slocid");
+	var orgid = localStorage.getItem("orgid");
+	var thermid = localStorage.getItem("thermid");
+	var userid = localStorage.getItem("userid");
+	
+	$scope.getunmappedsensor = function(){
+		var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+ "&sensorid="+$stateParams.sensor_id;
+		$http.post("http://"+globalip+"/get_sensor_unmapped",data_parameters, {
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+		})
+		.success(function(response) {
+			if(response[0].status != "N"){
+				$scope.response_unmapped = response;
+			}
+			else $scope.response_unmapped = "City";
+			$scope.sensor_id = 0; // sensor type id
+		})
+	}
+	
+	$scope.getid = function(id){
+		var tempid = id.split(",");
+		console.log(id);
+		if(id == ""){
+			mappedsensorid = 0;
+		}
+		else{
+			$scope.sensor_id = tempid[0]; // sensor type id
+			mappedsensorid = tempid[1];
+			mapped_sensor_type_id = tempid[0];
+		}
+	}
+	
+	$scope.getmapped = function(sensor_type_id){
+		var logic_status = $("#lightvalue").prop("checked");
+		if(logic_status)logic_status = 1;
+		else logic_status = 0;
+		
+		if(mapped_sensor_type_id == "4"){
+			mappedsensorstat = $("#setpointrange").val();
+			mappedsensorthreshold = $("#setpointvalue").val();
+		}
+		//console.log(val1+" "+sensorid);
+		if(mappedsensorid != 0){
+			var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+ "&id="+userid+ "&sensorid="+$stateParams.sensor_id+ "&sensortypeid="+$stateParams.sensor_type_id+ "&mappedsensorid="+mappedsensorid+ "&mappedsensortypeid="+mapped_sensor_type_id+ "&mappedsensorstat="+mappedsensorstat+ "&mappedsensorthreshold="+mappedsensorthreshold+ "&sensorstatus="+logic_status;
+			console.log(data_parameters);
+			$http.post("http://"+globalip+"/sensor_mapping",data_parameters, {
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+			})
+			.success(function(response) {
+				$scope.getunmappedsensor();
+				$ionicPopup.show({
+					template: '',
+					title: 'Sensor mapped successfully.',
+					scope: $scope,
+					buttons: [
+						{ 
+						  text: 'Ok',
+						  type: 'button-assertive'
+						},
+					]
+				})
+			})
+		}
+		else{
+			$ionicPopup.show({
+			  template: '',
+			  title: 'Please select sensor',
+			  scope: $scope,
+			  buttons: [
+				{ 
+				  text: 'Ok',
+				  type: 'button-assertive'
+				},
+			  ]
+			})
+		}
+	}
+	
+	var mappedsensorthreshold = 0;
+	var mappedsensorstat = 0;
+	var mappedsensorid = 0;
+	var mapped_sensor_type_id = 0;
+	
+	$scope.getselectboxval = function(sensorid,val){
+		console.log(val);
+		var temp = sensorid.split(",");
+		if(temp[0] == "1"){
+			mappedsensorstat = val;
+		}
+		if(temp[0] == "3"){
+			mappedsensorstat = val;
+		}
+		if(temp[0] == "4"){
+			mappedsensorstat = $("#setpointrange").val();
+			mappedsensorthreshold = $("#setpointvalue").val();
+		}
+		if(temp[0] == "5"){
+			mappedsensorstat = val;
+		}
+	}
+	$scope.getunmappedsensor();
+})
+
+.controller('sensormappinglistCtrl', function($scope,$http,$rootScope,$stateParams,$ionicModal,$ionicPopup) {
+	$scope.editrokerList = [{ text: "On", value: "1"},{ text: "Off", value: "0"}];
+	$scope.windowList = [{ text: "Open", value: "1" },{ text: "Close", value: "0" }];
+	$scope.occupancyList = [{ text: "Occupy", value: "1" },{ text: "Unoccupy", value: "0" }];
+	
+	var slocid = localStorage.getItem("slocid");
+	var orgid = localStorage.getItem("orgid");
+	var thermid = localStorage.getItem("thermid");
+	var userid = localStorage.getItem("userid");
+	
+	$scope.getupdatesensor = function(){
+		var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+ "&sensorid="+$stateParams.sensor_id;
+		$http.post("http://"+globalip+"/get_sensor_mapping",data_parameters, {
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+		})
+		.success(function(response) {
+			if(response[0].status != "N"){
+				var sensor_mapping_data = [];
+				for(var i = 0;i <  response.length;i++){
+					var status = 0;
+					var lightstatus = 0;
+					var threshold = 0;
+					
+					if(response[i].mapped_sensor_type_id == "1"){
+						if(response[i].mapped_sensor_stat == "1")status = "On";
+						else status = "Off";
+					}
+					if(response[i].mapped_sensor_type_id == "3"){
+						if(response[i].mapped_sensor_stat == "1")status = "Open";
+						else status = "Close";
+					}
+					if(response[i].mapped_sensor_type_id == "5"){
+						if(response[i].mapped_sensor_stat == "1")status = "Occupy";
+						else status = "Unoccupy";
+					}
+					if(response[i].mapped_sensor_type_id == "4"){
+						if(response[i].mapped_sensor_stat == "1")status = "On";
+						else status = "Off";
+					}
+					
+					if(response[i].sensor_status == "1")lightstatus = "On";
+					else lightstatus = "Off"
+					
+					sensor_mapping_data.push({mapped_sensor_id:response[i].mapped_sensor_id,mapped_sensor_name:response[i].mapped_sensor_name,mapped_sensor_stat:response[i].mapped_sensor_stat,mapped_sensor_threshold:response[i].mapped_sensor_threshold,mapped_sensor_type:response[i].mapped_sensor_type,mapped_sensor_type_id:response[i].mapped_sensor_type_id,org_id:response[i].org_id,sensor_id:response[i].sensor_id,sensor_status:response[i].sensor_status,sloc_id:response[i].sloc_id,therm_id:response[i].therm_id,a_mapped_sensor_stat:status,a_sensor_status:lightstatus});
+				}
+				$scope.response = sensor_mapping_data;
+			}
+			else $scope.response = "City";
+		});
+	}
+	
+	$ionicModal.fromTemplateUrl('templates/editsensormapping.html', {
+  		scope: $scope
+  	}).then(function(modal) {
+    	$scope.modal = modal;
+	});
+  	
+	$scope.show = function(mappedsensorid,mapedsensortype,mappedsensorname,mappedid,lightstatus,mapped_sensor_stat,threshold){
+		$scope.edit_mappedsensorid = mappedsensorid+","+mapedsensortype+","+mappedsensorname;
+		$scope.sensor_id = mappedid;
+		if(lightstatus == "1"){
+			$scope.editlightvalue = "checked";
+			$scope.data = {
+				editlightvalue1 : "1"
+			}
+		}else{
+			$scope.editlightvalue = "";
+		}
+		
+		if(mappedid == "1"){
+			if(mapped_sensor_stat == "1")$scope.data = {editrockerlist : "1"};
+			else $scope.data = {editrockerlist : "0"};
+		}
+		if(mappedid == "3"){
+			if(mapped_sensor_stat == "1")$scope.data = {editwindowlist : "1"};
+			else $scope.data = {editwindowlist : "0"};
+		}
+		if(mappedid == "5"){
+			if(mapped_sensor_stat == "1")$scope.data = {editoccupancylist : "1"};
+			else $scope.data = {editoccupancylist : "0"};
+		}
+		if(mappedid == "4"){
+			$scope.editthreshold = threshold;
+		}
+		$scope.modal.show();
+	}
+	
+	$scope.editgetmapped = function(typeid){
+		var mapped_values = $scope.edit_mappedsensorid.split(",");
+		
+		// edit light status
+		var logic_status = $scope.data.editlightvalue1;
+		if(logic_status == "1")logic_status = 1;
+		else logic_status = 0;
+		
+		var sensortype_id = "2";
+		
+		var mappedsensorid = mapped_values[0];
+		var mapped_sensor_type_id = typeid;
+		var mappedsensorstat = 0;
+		var mappedsensorthreshold = 0;
+		
+		if(mapped_sensor_type_id == "1")mappedsensorstat = $scope.data.editrockerlist;
+		if(mapped_sensor_type_id == "3")mappedsensorstat = $scope.data.editwindowlist;
+		if(mapped_sensor_type_id == "5")mappedsensorstat = $scope.data.editoccupancylist;
+		if(mapped_sensor_type_id == "4"){
+			mappedsensorstat = $scope.editthreshold;
+			var mappedsensorthreshold =  $("#editsetpointrange").val();
+		}
+		
+		var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+ "&id="+userid+ "&sensorid="+$stateParams.sensor_id+ "&sensortypeid="+sensortype_id+ "&mappedsensorid="+mappedsensorid+ "&mappedsensortypeid="+mapped_sensor_type_id+ "&mappedsensorstat="+mappedsensorstat+ "&mappedsensorthreshold="+mappedsensorthreshold+ "&sensorstatus="+logic_status;
+		
+		$http.post("http://"+globalip+"/sensor_mapping",data_parameters, {
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+		})
+		.success(function(response) {
+			$ionicPopup.show({
+				template: '',
+				title: 'Sensor updated successfully.',
+				scope: $scope,
+				buttons: [
+					{ 
+					  text: 'Ok',
+					  type: 'button-assertive',
+					  onTap:function(e){
+            			$scope.modal.hide();
+       				  }
+					},
+				]
+			})
+			$scope.getupdatesensor();
+		})
+	}
+	$scope.getupdatesensor();
+})
+
+
 .controller('ScheduleCtrl', function($scope,$http,$rootScope,$stateParams,$ionicSideMenuDelegate) {
 	$scope.clientSideList = [
 		{ text: "Work Week", value: "1" },

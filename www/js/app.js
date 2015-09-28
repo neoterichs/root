@@ -143,6 +143,25 @@ angular.module('ionicApp', ['ionic','ngCordova','starter.controllers'])
 		}
       }
     })
+	.state('eventmenu.sensormapping', {
+      url: "/sensormapping/:sensor_id?sensor_type_id",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/sensormapping.html",
+		  controller: "sensormappingCtrl"
+		}
+      }
+    })
+
+	.state('eventmenu.sensormappinglist', {
+      url: "/sensormappinglist/:sensor_id",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/sensormappinglist.html",
+		  controller: "sensormappinglistCtrl"
+		}
+      }
+    })
 	.state('eventmenu.changepassword', {
       url: "/changepassword",
       views: {
@@ -334,7 +353,7 @@ angular.module('ionicApp', ['ionic','ngCordova','starter.controllers'])
 
 .service('CalcService', function($rootScope,$ionicPopup,$cordovaLocalNotification){
 	var socket = null;
-	
+	var popupthermonoff;
 	this.connect = function() { 
 		var slocid = localStorage.getItem("slocid");
 		var orgid = localStorage.getItem("orgid");
@@ -368,13 +387,14 @@ angular.module('ionicApp', ['ionic','ngCordova','starter.controllers'])
 			if(x[0].socketname == "watcher"){
 				var thermid = localStorage.getItem("thermid");
 				if(x[0].thermid == thermid){
+					console.log(x[0].thermostatonoff);
 					if(x[0].thermostatonoff == "N"){
 						$("#hvac_desktop").css({"pointer-events":"none","opacity":"0.4"});
 						$("#rootcontrol_desktop").css({"pointer-events":"none","opacity":"0.4"});
 						
 						$rootScope.$broadcast('eventWatcher');
 						
-						$ionicPopup.show({
+						popupthermonoff = $ionicPopup.show({
 							template: '',
 							title: 'No thermostat in selected location',
 							buttons: [
@@ -388,6 +408,7 @@ angular.module('ionicApp', ['ionic','ngCordova','starter.controllers'])
 					if(x[0].thermostatonoff == "Y"){
 						$("#hvac_desktop").css({"pointer-events":"auto","opacity":"1"});
 						$("#rootcontrol_desktop").css({"pointer-events":"auto","opacity":"1"});
+						popupthermonoff.close();
 					}
 				}
 			}
