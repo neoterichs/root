@@ -1111,19 +1111,17 @@ angular.module('starter.controllers', [])
 	var mapped_sensor_type_id = 0;
 	
 	$scope.getselectboxval = function(sensorid,val){
-		console.log(val);
-		var temp = sensorid.split(",");
-		if(temp[0] == "1"){
+		if(sensorid == "1"){
 			mappedsensorstat = val;
 		}
-		if(temp[0] == "3"){
+		if(sensorid == "3"){
 			mappedsensorstat = val;
 		}
-		if(temp[0] == "4"){
+		if(sensorid == "4"){
 			mappedsensorstat = $("#setpointrange").val();
 			mappedsensorthreshold = $("#setpointvalue").val();
 		}
-		if(temp[0] == "5"){
+		if(sensorid == "5"){
 			mappedsensorstat = val;
 		}
 	}
@@ -1166,8 +1164,8 @@ angular.module('starter.controllers', [])
 						else status = "Unoccupy";
 					}
 					if(response[i].mapped_sensor_type_id == "4"){
-						if(response[i].mapped_sensor_stat == "1")status = "On";
-						else status = "Off";
+						if(response[i].mapped_sensor_stat == "H")status = "High";
+						else status = "Low";
 					}
 					
 					if(response[i].sensor_status == "1")lightstatus = "On";
@@ -1212,12 +1210,14 @@ angular.module('starter.controllers', [])
 			else $scope.data = {editoccupancylist : "0"};
 		}
 		if(mappedid == "4"){
+			$scope.editsetpointrangeval = mapped_sensor_stat;
 			$scope.editthreshold = threshold;
 		}
 		$scope.modal.show();
 	}
 	
 	$scope.editgetmapped = function(typeid){
+	
 		var mapped_values = $scope.edit_mappedsensorid.split(",");
 		
 		// edit light status
@@ -1229,18 +1229,18 @@ angular.module('starter.controllers', [])
 		
 		var mappedsensorid = mapped_values[0];
 		var mapped_sensor_type_id = typeid;
-		var mappedsensorstat = 0;
-		var mappedsensorthreshold = 0;
+		var editmappedsensorstat = 0;
+		var editmappedsensorthreshold = 0;
 		
 		if(mapped_sensor_type_id == "1")mappedsensorstat = $scope.data.editrockerlist;
 		if(mapped_sensor_type_id == "3")mappedsensorstat = $scope.data.editwindowlist;
 		if(mapped_sensor_type_id == "5")mappedsensorstat = $scope.data.editoccupancylist;
 		if(mapped_sensor_type_id == "4"){
-			mappedsensorstat = $scope.editthreshold;
-			var mappedsensorthreshold =  $("#editsetpointrange").val();
+			editmappedsensorstat = $("#editsetpointrange").val();
+			editmappedsensorthreshold = $("#editsetpointvalue").val();;
 		}
 		
-		var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+ "&id="+userid+ "&sensorid="+$stateParams.sensor_id+ "&sensortypeid="+sensortype_id+ "&mappedsensorid="+mappedsensorid+ "&mappedsensortypeid="+mapped_sensor_type_id+ "&mappedsensorstat="+mappedsensorstat+ "&mappedsensorthreshold="+mappedsensorthreshold+ "&sensorstatus="+logic_status;
+		var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+ "&id="+userid+ "&sensorid="+$stateParams.sensor_id+ "&sensortypeid="+sensortype_id+ "&mappedsensorid="+mappedsensorid+ "&mappedsensortypeid="+mapped_sensor_type_id+ "&mappedsensorstat="+editmappedsensorstat+ "&mappedsensorthreshold="+editmappedsensorthreshold+ "&sensorstatus="+logic_status;
 		
 		$http.post("http://"+globalip+"/sensor_mapping",data_parameters, {
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
@@ -1263,6 +1263,49 @@ angular.module('starter.controllers', [])
 			$scope.getupdatesensor();
 		})
 	}
+	
+	$scope.deletemap = function(mappedlightid,sensorid){
+		$ionicPopup.show({
+			template: '',
+			title: 'Are you sure',
+			scope: $scope,
+			buttons: [
+			 	{ text: 'Cancel', onTap: function(e) { return true; } },
+				{ 
+				  text: 'Ok',
+				  type: 'button-assertive',
+				  onTap:function(e){
+					$scope.deleteconfirm(mappedlightid,sensorid);
+				  }
+				},
+			]
+		})
+	}
+	
+	$scope.deleteconfirm = function(mappedlightid,sensorid){
+		console.log(mappedlightid,sensorid);
+		var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+ "&sensorid="+mappedlightid+ "&mappedsensorid="+sensorid;
+		$http.post("http://"+globalip+"/del_sensor_mapping",data_parameters, {
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+		})
+		.success(function(response) {
+			$ionicPopup.show({
+				template: '',
+				title: 'Sensor deleted successfully',
+				scope: $scope,
+				buttons: [
+					{ 
+					  text: 'Ok',
+					  type: 'button-assertive',
+					  onTap:function(e){
+						$scope.getupdatesensor();
+					  }
+					},
+				]
+			})
+		})
+	}
+	
 	$scope.getupdatesensor();
 })
 

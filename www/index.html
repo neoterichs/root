@@ -338,14 +338,7 @@
 <script id="templates/compose.html" type="text/ng-template">
 	<ion-view view-title="Compose">
 	  <ion-content>
-			<fancy-select
-						  header-text="Select Thermostat"
-						  allow-empty='false'
-						  value="val.multiple"
-						  text="countries_text_multiple"
-						  items="countries"
-						  multi-select="true"   
-						  >
+			<fancy-select header-text="Select Thermostat" allow-empty='false' value="val.multiple" text="countries_text_multiple" items="countries" multi-select="true">
 			</fancy-select>
 			 <div class="row">
 			  <div class="col"> 
@@ -390,12 +383,7 @@
 	  <ion-content>
 		<div class="list">
 		  <!-- Multi select -->
-		  <ion-checkbox
-					  ng-repeat="item in items"
-					  ng-if="multiSelect"
-					  ng-checked="item.checked"
-					  ng-model="item.checked"
-					  class="item item-text-wrap">
+		  <ion-checkbox ng-repeat="item in items" ng-if="multiSelect" ng-checked="item.checked" ng-model="item.checked" class="item item-text-wrap">
 			{{item.text}}
 		  </ion-checkbox>
 		</div>
@@ -603,7 +591,7 @@
 					<div class="item item-divider">
 						Sensor status
 					</div>
-					<ion-radio ng-repeat="item in rokerList" ng-value="item.value" ng-model="data.rockerlist" ng-click="getselectboxval(sensorid,item.value)" >
+					<ion-radio ng-repeat="item in rokerList" ng-value="item.value" ng-model="data.rockerlist" ng-click="getselectboxval(sensor_id,item.value)" >
 						{{ item.text }}
 					</ion-radio>
 				</div>
@@ -612,7 +600,7 @@
 					<div class="item item-divider">
 						Sensor status
 					</div>
-					<ion-radio ng-repeat="item in occupancyList" ng-value="item.value" ng-model="data.occupancylist" ng-click="getselectboxval(sensorid,item.value)" >
+					<ion-radio ng-repeat="item in occupancyList" ng-value="item.value" ng-model="data.occupancylist" ng-click="getselectboxval(sensor_id,item.value)" >
 						{{ item.text }}
 					</ion-radio>
 				</div>
@@ -621,7 +609,7 @@
 					<div class="item item-divider">
 						Sensor status
 					</div>
-					<ion-radio ng-repeat="item in windowList" ng-value="item.value" ng-model="data.windowlist" ng-click="getselectboxval(sensorid,item.value)" >
+					<ion-radio ng-repeat="item in windowList" ng-value="item.value" ng-model="data.windowlist" ng-click="getselectboxval(sensor_id,item.value)" >
 						{{ item.text }}
 					</ion-radio>
 				</div>
@@ -682,10 +670,12 @@
 					<div class="col">{{item.mapped_sensor_threshold}}</div>
 					<div class="col">{{item.a_sensor_status}}</div>
 					<div class="col">
-						<a class="item-icon-right">
+						<a class="item-icon"  style="font-size:20px;">
 							<i class="icon ion-compose"  ng-click="show({{item.mapped_sensor_id}},'{{item.mapped_sensor_type}}','{{item.mapped_sensor_name}}',{{item.mapped_sensor_type_id}},'{{item.sensor_status}}','{{item.mapped_sensor_stat}}','{{item.mapped_sensor_threshold}}')"></i>
 						</a>
+						<a class="item-icon-right" ><i class="icon ion-ios-trash-outline item-icon" ng-click="deletemap({{item.sensor_id}},{{item.mapped_sensor_id}})"></i></a>
 					</div>
+
 				</div>
 				<div class="item"  ng-if="response == 'City'">
 					<h2><center>No device mapped</center></h2>
@@ -746,8 +736,8 @@
 					  <div class="col col-75"><input type="text" id="editsetpointvalue" ng-model="editthreshold" placeholder="Enter value"></div>
 					  <div class="col">
 					  	<select id="editsetpointrange">
-							<option value="H" ng-selected="selected">High</option>
-							<option value="L" >Low</option>
+							<option value="H" ng-selected="editsetpointrangeval == 'H'">High</option>
+							<option value="L" ng-selected="editsetpointrangeval == 'L'">Low</option>
 						</select></div>
 					</div>
 					</label>
