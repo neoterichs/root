@@ -480,18 +480,19 @@
 		<ion-refresher on-refresh="refreshsensorconfiglist()">
 		</ion-refresher>
 		<div class="list">
-			<div class="item row padding" style="margin-top: 0;padding-top: 5px;" ng-repeat="item in response"  ng-if="response != 'City'">
+			<div class="item" style="margin-top: 0;padding-top: 5px;" ng-repeat="item in response"  ng-if="response != 'City'">
 				<div class="col-25">{{item.sensor_id}}</div>
 				<div class="col-25">{{item.sensor_type}}</div>
 				<div class="col-25">
 					<a class="item-icon-right" >
 						<i class="icon ion-compose" ng-click="editsensor(item.sensor_id,item.sensor_type,item.sensor_name,item.room_id,item.schedule_id,item.sensor_active_yn,item.sensor_min_temp,item.sensor_max_temp,item.sensor_type_id,item.logic_id)"></i>
 					</a>
-					</div>
-			<div class="col-25">		
-					<a ui-sref="eventmenu.sensormapping({sensor_id: item.sensor_id,sensor_type_id:item.sensor_type_id})" class="item-icon"  ng-if="item.sensor_type_id == '2'">
-						<i class="icon ion-network item-icon-right" style="font-size:24px; margin-top:4px;" ></i>
-					</a>
+				</div>
+				<div class="col-25">		
+						<a ui-sref="eventmenu.sensormapping({sensor_id: item.sensor_id,sensor_type_id:item.sensor_type_id})" class="item-icon"  ng-if="item.sensor_type_id == '2'">
+							<i class="icon ion-network item-icon-right" style="font-size:24px; margin-top:4px;" ></i>
+						</a>
+				</div>
 			</div>
 			<div class="item"  ng-if="response == 'City'">
 				<h2><center>No device to configure</center></h2>
@@ -703,7 +704,7 @@
 					<div class="item item-divider">
 						Sensor status
 					</div>
-					<ion-radio ng-repeat="item in editrokerList" ng-value="item.value" ng-model="data.editrockerlist">
+					<ion-radio ng-repeat="item in editrokerList" ng-value="item.value" ng-model="data.editrockerlist" ng-change="editmappedsensorstat(item.value)">
 						{{ item.text }}
 					</ion-radio>
 				</div>
@@ -712,7 +713,7 @@
 					<div class="item item-divider">
 						Sensor status
 					</div>
-					<ion-radio ng-repeat="item in editoccupancyList" ng-value="item.value" ng-model="data.editoccupancylist">
+					<ion-radio ng-repeat="item in editoccupancyList" ng-value="item.value" ng-model="data.editoccupancylist" ng-change="editmappedsensorstat(item.value)">
 						{{ item.text }}
 					</ion-radio>
 				</div>
@@ -721,7 +722,7 @@
 					<div class="item item-divider">
 						Sensor status
 					</div>
-					<ion-radio ng-repeat="item in editwindowList" ng-value="item.value" ng-model="data.editwindowlist">
+					<ion-radio ng-repeat="item in editwindowList" ng-value="item.value" ng-model="data.editwindowlist" ng-change="editmappedsensorstat(item.value)">
 						{{ item.text }}
 					</ion-radio>
 				</div>
@@ -733,8 +734,8 @@
 
 				  <label class="item item-input">
 				  	<div class="row">
-					  <div class="col col-75"><input type="text" id="editsetpointvalue" ng-model="editthreshold" placeholder="Enter value"></div>
-					  <div class="col">
+					  <div class="col-50"  style="width:100px;"><input type="text" id="editsetpointvalue" ng-model="editthreshold" placeholder="Enter value"></div>
+					  <div class="col-50" style="margin-left:20px;">
 					  	<select id="editsetpointrange">
 							<option value="H" ng-selected="editsetpointrangeval == 'H'">High</option>
 							<option value="L" ng-selected="editsetpointrangeval == 'L'">Low</option>
@@ -742,20 +743,11 @@
 					</div>
 					</label>
 				</div>
-				
-			  <label class="item">
-				<ul>
-				   <li class="item-toggle">
-					 Light status
-					 <label class="toggle toggle-balanced">
-					   <input type="checkbox" ng-model="data.editlightvalue1" id="editlightvalue" ng-checked="editlightvalue">
-					   <div class="track">
-						 <div class="handle"></div>
-					   </div>
-					 </label>
-				  </li>
-				</ul>
-			  </label>
+			<label>
+				<ion-toggle ng-repeat="itemthereshold in threshholdList" ng-change="itemtheresholdChange(itemthereshold.checked)" ng-model="itemthereshold.checked" ng-checked="itemthereshold.checked">
+          			{{ itemthereshold.text }}
+        		</ion-toggle>
+			</label>
 			  	<button class="button button-block login-button" ng-click="editgetmapped(sensor_id)">
 					Update
 				</button>

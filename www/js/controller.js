@@ -1132,6 +1132,7 @@ angular.module('starter.controllers', [])
 	$scope.editrokerList = [{ text: "On", value: "1"},{ text: "Off", value: "0"}];
 	$scope.windowList = [{ text: "Open", value: "1" },{ text: "Close", value: "0" }];
 	$scope.occupancyList = [{ text: "Occupy", value: "1" },{ text: "Unoccupy", value: "0" }];
+	$scope.threshholdList = [{ text: "Light Status", checked: false }];
 	
 	var slocid = localStorage.getItem("slocid");
 	var orgid = localStorage.getItem("orgid");
@@ -1189,12 +1190,9 @@ angular.module('starter.controllers', [])
 		$scope.edit_mappedsensorid = mappedsensorid+","+mapedsensortype+","+mappedsensorname;
 		$scope.sensor_id = mappedid;
 		if(lightstatus == "1"){
-			$scope.editlightvalue = "checked";
-			$scope.data = {
-				editlightvalue1 : "1"
-			}
+			$scope.threshholdList = [{ text: "Light Status", checked: true }];
 		}else{
-			$scope.editlightvalue = "";
+			$scope.threshholdList = [{ text: "Light Status", checked: false }];
 		}
 		
 		if(mappedid == "1"){
@@ -1210,37 +1208,41 @@ angular.module('starter.controllers', [])
 			else $scope.data = {editoccupancylist : "0"};
 		}
 		if(mappedid == "4"){
+			console.log(mapped_sensor_stat);
 			$scope.editsetpointrangeval = mapped_sensor_stat;
 			$scope.editthreshold = threshold;
 		}
 		$scope.modal.show();
 	}
 	
-	$scope.editgetmapped = function(typeid){
+	// gloabl light status
+	var global_logic_status;
+	$scope.itemtheresholdChange = function(val){
+		if(val)global_logic_status = 1;
+		else global_logic_status = 0;
+	}
 	
+	// global mappedsensorstat value
+	var global_mappedsensorstat;
+	$scope.editmappedsensorstat = function(val){
+		global_mappedsensorstat = val;
+	}
+	
+	$scope.editgetmapped = function(typeid){
 		var mapped_values = $scope.edit_mappedsensorid.split(",");
 		
-		// edit light status
-		var logic_status = $scope.data.editlightvalue1;
-		if(logic_status == "1")logic_status = 1;
-		else logic_status = 0;
-		
 		var sensortype_id = "2";
-		
 		var mappedsensorid = mapped_values[0];
 		var mapped_sensor_type_id = typeid;
 		var editmappedsensorstat = 0;
 		var editmappedsensorthreshold = 0;
 		
-		if(mapped_sensor_type_id == "1")mappedsensorstat = $scope.data.editrockerlist;
-		if(mapped_sensor_type_id == "3")mappedsensorstat = $scope.data.editwindowlist;
-		if(mapped_sensor_type_id == "5")mappedsensorstat = $scope.data.editoccupancylist;
 		if(mapped_sensor_type_id == "4"){
-			editmappedsensorstat = $("#editsetpointrange").val();
-			editmappedsensorthreshold = $("#editsetpointvalue").val();;
+			global_mappedsensorstat = $("#editsetpointrange").val();
+			editmappedsensorthreshold = $("#editsetpointvalue").val();
 		}
 		
-		var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+ "&id="+userid+ "&sensorid="+$stateParams.sensor_id+ "&sensortypeid="+sensortype_id+ "&mappedsensorid="+mappedsensorid+ "&mappedsensortypeid="+mapped_sensor_type_id+ "&mappedsensorstat="+editmappedsensorstat+ "&mappedsensorthreshold="+editmappedsensorthreshold+ "&sensorstatus="+logic_status;
+		var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+ "&id="+userid+ "&sensorid="+$stateParams.sensor_id+ "&sensortypeid="+sensortype_id+ "&mappedsensorid="+mappedsensorid+ "&mappedsensortypeid="+mapped_sensor_type_id+ "&mappedsensorstat="+global_mappedsensorstat+ "&mappedsensorthreshold="+editmappedsensorthreshold+ "&sensorstatus="+global_logic_status;
 		
 		$http.post("http://"+globalip+"/sensor_mapping",data_parameters, {
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
@@ -1474,7 +1476,7 @@ angular.module('starter.controllers', [])
 			var slocid = localStorage.getItem("slocid");
 			var orgid = localStorage.getItem("orgid");
 			var userid = localStorage.getItem("userid");
-			var thermid =  localStorage.getItem("thermid");
+			var thermid = localStorage.getItem("thermid");
 			var scheduleid = 0;
 			var fan_mode = "X";
 			var heat_mode = "X";
@@ -1499,16 +1501,16 @@ angular.module('starter.controllers', [])
 			var slocid = localStorage.getItem("slocid");
 			var orgid = localStorage.getItem("orgid");
 			var userid = localStorage.getItem("userid");
-			var thermid =  localStorage.getItem("thermid");
+			var thermid = localStorage.getItem("thermid");
 			var scheduleid = 0;
 			var fan_mode = "X";
 			var heat_mode = "X";
 			var hvac_temprature = "X";
 			var security_mode = "X";
 			var set_point_temprature = $scope.setpointtemp;
-			
+
 			var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+ "&scheduleid="+scheduleid+ "&fan_mode="+fan_mode+ "&heat_mode="+heat_mode+ "&hvac_temprature="+hvac_temprature+ "&security_mode="+security_mode+ "&set_point_temprature="+set_point_temprature+ "&id="+userid+"&token="+token;
-			$http.post("http://"+globalip+"/edit_hvac",data_parameters, {
+			$http.post("http://"+globalip+"/edit_hvac",data_parameters,{
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
 			})
 			.success(function(response) {
