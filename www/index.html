@@ -548,11 +548,12 @@
 		</label>
 		<label class="item item-input" ng-if="user.s_type_id == '2'">
 		  <span class="input-label">Logicboard</span>
-		  	<select ng-model="user.l_id">
+		  	<select ng-model="user.l_id" ng-if="response_logicboard != 'City'">
 				<option ng-selected="respone.logic_id == user.s_logicid" ng-repeat="respone in response_logicboard" value="{{respone.logic_id}}">
 					{{respone.logic_name}}
 				</option>
 			</select>
+			<input type="text" disabled ng-if="response_logicboard == 'City'" value="None"/>
 		</label>
 		<br>
 		<ul class="list">

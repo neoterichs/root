@@ -739,6 +739,7 @@ angular.module('starter.controllers', [])
 			}
 			if(sensortype_id == "2"){
 				logic_id = user.l_id;
+				if(logic_id == null)logic_id = 0;
 			}
 			
 			var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+ "&sensorid="+user.deviceid+ "&sensorname="+user.device+ "&scheduleid="+schedule_id+ "&maxtemp="+maxtemp+ "&mintemp="+mintemp+ "&id="+userid+ "&sensoractiveyn="+activeynt+ "&roomid="+user.r_id+ "&logicid="+logic_id;
