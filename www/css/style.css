@@ -80,6 +80,3 @@ a{text-decoration: none; display:block; width:100%; color:#000;}
 /* rootcontrol icon */
 .rootcontrolIcon{background-image:url(../images/wifi.png); background-repeat:no-repeat; height:30px; width:35px; background-position:center; background-position:center; }
 
-/*loading spinner*/
-.loading{background-color: #1D4461 !important;}
-.spinner svg {stroke: #fff;fill: #FFF;}

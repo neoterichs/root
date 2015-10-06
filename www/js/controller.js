@@ -590,7 +590,7 @@ angular.module('starter.controllers', [])
 
 
 .controller('sensorconfigCtrl', function($scope,$http,$ionicModal,$rootScope,$ionicPopup,$ionicLoading) {
-	$ionicLoading.show({template: '<ion-spinner icon="android"></ion-spinner>'});
+	$ionicLoading.show({template: '<ion-spinner icon="crescent"></ion-spinner>'});
 	var sensortype_id = "";
 	
   	var slocid = localStorage.getItem("slocid");
@@ -814,7 +814,7 @@ angular.module('starter.controllers', [])
 
 .controller('MyCtrl1', function($scope,$http,$ionicModal,$rootScope,$ionicLoading) {
 	
-	$ionicLoading.show({template: '<ion-spinner icon="android"></ion-spinner>'});
+	$ionicLoading.show({template: '<ion-spinner icon="crescent"></ion-spinner>'});
 	
 	var thermonoff = localStorage.getItem("therm_online");
 	if(thermonoff == "N"){
@@ -893,7 +893,7 @@ angular.module('starter.controllers', [])
 
 
 .controller('amenitiesCtrl', function($scope,$stateParams,$ionicPopover,$http,$sce,$rootScope,$ionicLoading) {
-	$ionicLoading.show({template: '<ion-spinner icon="android"></ion-spinner>'});
+	$ionicLoading.show({template: '<ion-spinner icon="crescent"></ion-spinner>'});
 	$scope.trustSrc = function(src) {
 		return $sce.trustAsResourceUrl(src);
 	}
@@ -1363,7 +1363,7 @@ angular.module('starter.controllers', [])
 
 .controller('CheckinCtrl', function($scope,$http,$rootScope,CalcService,$ionicPopup,$ionicLoading) {
 	CalcService.connect();
-	$ionicLoading.show({template: '<ion-spinner icon="android"></ion-spinner>'});
+	$ionicLoading.show({template: '<ion-spinner icon="crescent"></ion-spinner>'});
 	localStorage.setItem("logoutyn",0);
 	var thermonoff = localStorage.getItem("therm_online");
 	
