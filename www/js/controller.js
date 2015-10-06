@@ -589,7 +589,8 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('sensorconfigCtrl', function($scope,$http,$ionicModal,$rootScope,$ionicPopup) {
+.controller('sensorconfigCtrl', function($scope,$http,$ionicModal,$rootScope,$ionicPopup,$ionicLoading) {
+	$ionicLoading.show({template: '<ion-spinner icon="android"></ion-spinner>'});
 	var sensortype_id = "";
 	
   	var slocid = localStorage.getItem("slocid");
@@ -604,6 +605,7 @@ angular.module('starter.controllers', [])
 	.success(function(response) {
 		if(response[0].status != "N")$scope.response = response;
 		else $scope.response = "City";
+		$ionicLoading.hide();
 	});
 	
 	$ionicModal.fromTemplateUrl('templates/modal.html', {
@@ -810,7 +812,10 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('MyCtrl1', function($scope,$http,$ionicModal,$rootScope) {
+.controller('MyCtrl1', function($scope,$http,$ionicModal,$rootScope,$ionicLoading) {
+	
+	$ionicLoading.show({template: '<ion-spinner icon="android"></ion-spinner>'});
+	
 	var thermonoff = localStorage.getItem("therm_online");
 	if(thermonoff == "N"){
 		console.log("thermostat off");
@@ -822,13 +827,14 @@ angular.module('starter.controllers', [])
 	var thermid = localStorage.getItem("thermid");
 	$scope.themostatname = localStorage.getItem("thermame"); 
 	
-  	var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+"&token="+token;
+	var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+"&token="+token;
 	$http.post("http://"+globalip+"/get_root_control",data_parameters, {
 		headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
 	})
 	.success(function(response) {
 		if(response[0].status != "N")$scope.response = response;
 		else $scope.response = "City";
+		$ionicLoading.hide();
 	});
   	/*
 	* if given group is the selected group, deselect it
@@ -886,7 +892,8 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('amenitiesCtrl', function($scope,$stateParams,$ionicPopover,$http,$sce,$rootScope) {
+.controller('amenitiesCtrl', function($scope,$stateParams,$ionicPopover,$http,$sce,$rootScope,$ionicLoading) {
+	$ionicLoading.show({template: '<ion-spinner icon="android"></ion-spinner>'});
 	$scope.trustSrc = function(src) {
 		return $sce.trustAsResourceUrl(src);
 	}
@@ -903,6 +910,7 @@ angular.module('starter.controllers', [])
 			$scope.response = response;
 		}
 		else $scope.response = "no";
+		$ionicLoading.hide();
 	});
 	
 	$scope.changeamenities = function(url){
@@ -1353,8 +1361,9 @@ angular.module('starter.controllers', [])
 	};
 })
 
-.controller('CheckinCtrl', function($scope,$http,$rootScope,CalcService,$ionicPopup) {
+.controller('CheckinCtrl', function($scope,$http,$rootScope,CalcService,$ionicPopup,$ionicLoading) {
 	CalcService.connect();
+	$ionicLoading.show({template: '<ion-spinner icon="android"></ion-spinner>'});
 	localStorage.setItem("logoutyn",0);
 	var thermonoff = localStorage.getItem("therm_online");
 	
@@ -1427,7 +1436,6 @@ angular.module('starter.controllers', [])
 					$scope.fancontrolMcolor = "medimg_s";
 					$scope.fancontrolLcolor = "lowimg_s";
 					$scope.fancontrolOcolor = "offimg_s";
-					
 				}
 				if(response[0].fan_mode == "M"){
 					$scope.fancontrolHimg = "highimg";
@@ -1464,6 +1472,7 @@ angular.module('starter.controllers', [])
 				}
 			}
 			else $scope.response = "City";
+			$ionicLoading.hide();
 		});
 	};
 	$scope.dashboardload();
@@ -1556,7 +1565,6 @@ angular.module('starter.controllers', [])
 		
 		var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+ "&scheduleid="+scheduleid+ "&fan_mode="+fan_mode+ "&heat_mode="+heat_mode+ "&hvac_temprature="+hvac_temprature+ "&security_mode="+security_mode+ "&set_point_temprature="+set_point_temprature+ "&id="+userid+"&token="+token;
 		$http.post("http://"+globalip+"/edit_hvac",data_parameters, {
-
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
 		})
 		.success(function(response) {
@@ -1620,7 +1628,6 @@ angular.module('starter.controllers', [])
 		var security_mode = "X";
 		var set_point_temprature = "X";
 		
-		
 		var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+ "&scheduleid="+scheduleid+ "&fan_mode="+fan_mode+ "&heat_mode="+heat_mode+ "&hvac_temprature="+hvac_temprature+ "&security_mode="+security_mode+ "&set_point_temprature="+set_point_temprature+ "&id="+userid+"&token="+token;
 		$http.post("http://"+globalip+"/edit_hvac",data_parameters, {
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
@@ -1645,14 +1652,13 @@ angular.module('starter.controllers', [])
 		var slocid = localStorage.getItem("slocid");
 		var orgid = localStorage.getItem("orgid");
 		var userid = localStorage.getItem("userid");
-		var thermid =  localStorage.getItem("thermid");
+		var thermid = localStorage.getItem("thermid");
 		var scheduleid = 0;
 		var fan_mode = "X";
 		var heat_mode = "X";
 		var hvac_temprature = "X";
 		var security_mode = smode;
 		var set_point_temprature = "X";
-		
 		
 		var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid+ "&scheduleid="+scheduleid+ "&fan_mode="+fan_mode+ "&heat_mode="+heat_mode+ "&hvac_temprature="+hvac_temprature+ "&security_mode="+security_mode+ "&set_point_temprature="+set_point_temprature+ "&id="+userid+"&token="+token;
 		$http.post("http://"+globalip+"/edit_hvac",data_parameters, {
@@ -1797,7 +1803,7 @@ angular.module('starter.controllers', [])
 
 .controller('setting', function($scope,$stateParams,$http,$ionicPopup){
 	$scope.user = {
-			opassword: '',
+			opassword : '',
 			npassword : '',
 			cpassword : ''
 	};
