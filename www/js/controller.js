@@ -463,7 +463,8 @@ angular.module('starter.controllers', [])
 	};
 })
 
-.controller('receiveCtrl', function($scope,$http,$ionicModal, $ionicScrollDelegate,$ionicPopup) {
+.controller('receiveCtrl', function($scope,$http,$ionicModal, $ionicScrollDelegate,$ionicPopup,$ionicLoading) {
+	$ionicLoading.show({template: '<ion-spinner icon="crescent"></ion-spinner>'});
 	var pagenum = 0;
 	var status = "Y";
 	var globalpagecount = 0;
@@ -492,6 +493,7 @@ angular.module('starter.controllers', [])
 						 $scope.items.push({msg:response[i].msg_remarks,sentby:response[i].sent_by,sentdate:response[i].create_dt});
 					}
 				}
+				$ionicLoading.hide();
 			});
 	}
 	$scope.$broadcast('scroll.infiniteScrollComplete');
@@ -523,7 +525,8 @@ angular.module('starter.controllers', [])
 	};
 })
 
-.controller('sentCtrl', function($scope,$http,$ionicModal,$ionicScrollDelegate,$ionicPopup) {
+.controller('sentCtrl', function($scope,$http,$ionicModal,$ionicScrollDelegate,$ionicPopup,$ionicLoading) {
+	$ionicLoading.show({template: '<ion-spinner icon="crescent"></ion-spinner>'});
 	var pagenum = 0;
 	var status = "Y";
 	var globalpagecount = 0;
@@ -547,7 +550,7 @@ angular.module('starter.controllers', [])
 				if(response[0].status != "N"){
 					globalpagecount = response[0].cnt;
 					$scope.response = response;
-					for (var i=0; i< $scope.response.length; i++) {
+					for(var i=0; i< $scope.response.length; i++){
 						var thermliststr = "";
 						for(var j = 0; j < $scope.response[i].thermostats.length; j++){
 							thermliststr +=  $scope.response[i].thermostats[j].thermostat_name+",";
@@ -555,9 +558,8 @@ angular.module('starter.controllers', [])
 						thermliststr = thermliststr.substr(0,(thermliststr.length-1))
 						$scope.items.push({msg:response[i].msg_remarks,sentdate:response[i].create_dt,list:thermliststr});
 					}
-			
 				}
-				
+				$ionicLoading.hide();
 			});
 	}
 	
